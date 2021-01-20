@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberns">
+
+	<insert id="member_insert" parameterType="member">
+		insert into member 
+		(userid, passwd, email, reg_date, email_conf, reg_status, profile_img, nickname, birth) 
+		values (#{userid}, #{passwd}, #{email},sysdate , 0, 1, 
+		'default.png', 
+		#{nickname, jdbcType=VARCHAR}, #{birth, jdbcType=VARCHAR})
+	</insert>
+	<select id = "member_idcheck" parameterType="String" resultType="member">
+		select * from member where userid = #{userid} and reg_status=1
+	</select>
+	<select id="member_findpwd" parameterType="String" resultType="member">
+		select * from member where userid = #{userid}
+	</select>
+	<update id="member_edit" parameterType="member">
+		update member set passwd=#{passwd}, email=#{email}, profile_img=#{profile_img, jdbcType=VARCHAR},
+		nickname=#{nickname, jdbcType=VARCHAR}, birth=#{birth, jdbcType=VARCHAR}  
+		where userid=#{userid}
+	</update>
+	<update id="member_delete" parameterType="String">
+		update member set reg_status=0, profile_img=null where userid = #{userid}
+	</update>
+	<select id="memberSearch" parameterType="String" resultType="member">
+		select * from member where userid like '%'||#{userid}||'%' and reg_status=1 and userid not in (#{userid})
+	</select>
+	<insert id="follow" parameterType="Map"  >
+		insert into follow
+			(fol_idx, mem_id, target_id, fol_date)
+			values (fol_seq.nextval, #{mem_id}, #{target_id}, sysdate )
+	</insert>
+	<select id="fol_list" parameterType="String" resultType="follow">
+		select distinct target_id from follow where mem_id=#{mem_id}
+	</select>
+	<select id="follower" parameterType="String" resultType="follow">
+		select distinct mem_id from follow where target_id=#{target_id}
+	</select>
+	<select id="followCheck" parameterType="follow"  resultType="follow">
+		select * from follow where mem_id=#{mem_id} and target_id=#{target_id}
+	</select>
+	<select id="follow_new" parameterType="follow">
+		insert into follow (fol_idx, mem_id, target_id, fol_date)
+		values(fol_seq.nextval, #{mem_id}, #{target_id}, sysdate)
+	</select>
+	<delete id="unfollow" parameterType="follow">
+		delete from follow where mem_id=#{mem_id} and target_id=#{target_id}
+	</delete>
+	<select id="selectuser" parameterType="String" resultType="member">
+     	select * from member where userid=#{id}
+    </select>
+	<select id="selectuseremail" parameterType="String" resultType="member">
+     	select * from member where email=#{email}
+    </select>
+	<select id="selectuserid" parameterType="String" resultType="member">
+     	select * from member where userid=#{userid}
+    </select>
+	<update id="rdpasswd" parameterType="member">
+     	update member set passwd = #{passwd} where userid = #{userid}
+    </update>
+    <select id="mail_check" parameterType="String" resultType="member">
+		select * from member where email=#{mail} and reg_status=1
+	</select>
+</mapper>
