@@ -1,10 +1,12 @@
 package Controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,14 +16,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import DTO.Board;
+import DTO.FollowDTO;
+import DTO.memberDTO;
+import service.FollowServiceImpl;
+import service.MemberServiceImpl;
 import service.PageService;
 
 @Controller
 public class PageController {
 	
 	@Autowired
-	private PageService service;
-	
+	private PageService page_service;
+	@Autowired
+	private FollowServiceImpl follow_service;
+	@Autowired
+	private MemberServiceImpl mem_service;
 	
 	@RequestMapping("good.do")
 	public String good() {
@@ -30,11 +39,14 @@ public class PageController {
 	}
 	
 	@RequestMapping("board_home.do")
-	public String board_home(Model model) {
+	public String board_home(Model model, HttpSession session) throws Exception {
 		System.out.println("home");
-		
-		List<Board> list = service.getBoardList();
-		System.out.println("list: "+list);
+		String userid = (String)session.getAttribute("id");
+		ArrayList<FollowDTO> fol_dto = follow_service.searchFollow(userid);
+		ArrayList<Board> list = new ArrayList<Board>();
+		for(int i = 0; i < fol_dto.size(); i++){
+			list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
+		}
 		
 		model.addAttribute("list", list);
 		return "board/board_home";
@@ -52,7 +64,8 @@ public class PageController {
 	public String board_write( @RequestParam("upload_file") MultipartFile mf,
 							  Board board,
 							  HttpServletRequest request,
-							  Model model) throws Exception {
+							  Model model,
+							  HttpSession session) throws Exception {
 		System.out.println("board_write");
 //		System.out.println("board.file "+board.getUpload());
 		
@@ -93,8 +106,11 @@ public class PageController {
 		
 		//board占쏙옙占쏙옙 file占싱몌옙 占쏙옙占쏙옙
 		board.setUpload(filename);
-		
-		result = service.insert(board);
+		String userid = (String)session.getAttribute("id");
+		board.setId(userid);
+		memberDTO dto = mem_service.findpwd(userid);
+		board.setName(dto.getNickname());
+		result = page_service.insert(board);
 		System.out.println("result: "+result);
 		
 		model.addAttribute("result", result);	

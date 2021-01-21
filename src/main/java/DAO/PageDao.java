@@ -1,5 +1,6 @@
 package DAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -22,7 +23,7 @@ public class PageDao {
 	}
 	
 	//�۸��
-	public List<Board> getBoardList(){
-		return session.selectList("list");
+	public ArrayList<Board> getBoardList(String id){
+		return (ArrayList)session.selectList("list", id);
 	}
 }

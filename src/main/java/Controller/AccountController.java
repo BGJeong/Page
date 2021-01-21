@@ -38,8 +38,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
+
+import DTO.Board;
+import DTO.FollowDTO;
 import DTO.memberDTO;
+import service.FollowServiceImpl;
 import service.MemberServiceImpl;
+import service.PageService;
 
 @Controller
 public class AccountController {
@@ -48,6 +53,10 @@ public class AccountController {
 	private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 	@Autowired
 	private MemberServiceImpl service;
+	@Autowired
+	private PageService page_service;
+	@Autowired
+	private FollowServiceImpl follow_service;
 
 	@Autowired
 	private void setNaverLoginBO(NaverLoginBO naverLoginBO) {
@@ -222,7 +231,6 @@ public class AccountController {
 		if (session.getAttribute("id") != null) {
 			id = (String) session.getAttribute("id");
 		} else {
-			logger.info("嚥≪뮄�젃占쎌뵥占쎈툧占쎈쭡");
 			id = "err";
 		}
 		memberDTO dto = service.findpwd(id);
@@ -279,6 +287,13 @@ public class AccountController {
 				session.setAttribute("id", userid);
 				session.setAttribute("pimg", dto.getProfile_img());
 				session.setAttribute("dto", dto);
+				ArrayList<FollowDTO> fol_dto = follow_service.searchFollow(userid);
+				ArrayList<Board> list = new ArrayList<Board>();
+				for(int i = 0; i < fol_dto.size(); i++){
+					list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
+				}
+				
+				model.addAttribute("list", list);
 				return "board/board_home";
 			} else {
 				result = 1;

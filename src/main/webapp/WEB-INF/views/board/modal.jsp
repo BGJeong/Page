@@ -28,12 +28,6 @@
 				<div class="modal-body">
 					<table class="table table-bordered align-middle text-center">
 						<caption>피드 만들기</caption>
-						<tr><th>ID</th>
-							<td><input type=text name="id" required="required"></td>
-						</tr>
-						<tr><th>작성자명</th>
-							<td><input type=text name="name" required="required"></td>
-						</tr>
 						<tr><th>내용</th>
 							<td><textarea rows="5" cols="40" name="content" required="required"></textarea></td>
 						</tr>

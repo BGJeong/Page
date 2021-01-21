@@ -28,7 +28,7 @@
 				</a>
 				
 				<a href="mypage.do" class="btn">
-					<img src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/user_blue.png" style="width:2rem;"class="">
+					<img src="<%=request.getContextPath() %>/upload/${pimg}" style="width:2rem;"class="">
 				</a>
 			</form>
 		</div>

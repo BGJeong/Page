@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class PageService {
 	}
 	
 	//�� ���
-	public List<Board> getBoardList() {
-		return dao.getBoardList();
+	public ArrayList<Board> getBoardList(String id) {
+		return dao.getBoardList(id);
 	}
 }

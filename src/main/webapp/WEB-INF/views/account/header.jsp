@@ -14,12 +14,12 @@
 <body>
 	<nav class="navbar navbar-light bg-light">
 		<div class="container-sm" style="width:80%;">
-			<a class="navbar-brand" href="home.do">
+			<a class="navbar-brand" href="board_home.do">
 				
 				<img src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/korean.png" alt="" style="width:4rem;"class="d-inline-block align-top img-fluid"> 
 			</a>
 			<form class="d-flex">
-				<a href="home.do" class="btn">
+				<a href="board_home.do" class="btn">
 					<img src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/home.png" style="width:2rem;"class="">
 				</a>
 				

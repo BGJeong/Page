@@ -28,3 +28,4 @@ delete from MEMBER where profile_img is null;
 delete from follow;
 select a.target_id, b.profile_img from FOLLOW a, member b where a.target_id = b.userid and a.mem_id='ddddd';
 select * from member;
+select a.userid, a.profile_img, b.content, b.upload, b.id from member a, board b where a.userid = b.id;
