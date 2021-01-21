@@ -15,7 +15,7 @@
 			<form method="post" action="retireAction.do" class="form-control">
 				<div class="mb-3">
 					<label for="exampleFormControlInput1" class="form-label">비밀번호</label>
-					<input type="password" class="form-control" id="passwd" placeholder="비밀번호">
+					<input type="password" name="passwd" class="form-control" id="passwd" placeholder="비밀번호">
 				</div>
 				<input type="submit" value="확인" class="btn btn-outline-dark btn-block">
 			</form>

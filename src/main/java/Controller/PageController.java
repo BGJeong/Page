@@ -44,10 +44,14 @@ public class PageController {
 		String userid = (String)session.getAttribute("id");
 		ArrayList<FollowDTO> fol_dto = follow_service.searchFollow(userid);
 		ArrayList<Board> list = new ArrayList<Board>();
+		ArrayList<memberDTO> mem_dto = new ArrayList<memberDTO>();
 		for(int i = 0; i < fol_dto.size(); i++){
 			list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
 		}
-		
+		for(int i = 0; i < list.size(); i++){
+			mem_dto.add(mem_service.findpwd(list.get(i).getId()));
+		}
+		model.addAttribute("mem_dto",mem_dto);
 		model.addAttribute("list", list);
 		return "board/board_home";
 	}

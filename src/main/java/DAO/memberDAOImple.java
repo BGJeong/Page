@@ -20,7 +20,7 @@ public class memberDAOImple implements memberDAO{
 	}
 	public int idcheck(String id) {
 		int result = 0;
-		memberDTO dto  =  sqlsession.selectOne("memberns.member_idcheck", id);
+		memberDTO dto  =  sqlsession.selectOne("memberns.member_findpwd", id);
 		if(dto != null){
 			result = 1;
 		}

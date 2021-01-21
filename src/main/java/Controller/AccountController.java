@@ -94,14 +94,17 @@ public class AccountController {
 		return "redirect:login.do";
 	}
 	
+	@SuppressWarnings("null")
 	@RequestMapping(value = "/edit_ok.do", method = RequestMethod.POST)
-	public String edit_ok(@RequestParam("profile") MultipartFile mf, memberDTO dto, HttpServletRequest request,
+	public String edit_ok(@RequestParam(value="profile",required=false) MultipartFile mf, memberDTO dto, HttpServletRequest request,
 			HttpSession session, Model model) throws Exception {
-
-		String filename = mf.getOriginalFilename();
-		if(filename==null) {
-			filename="default.png";
+		String filename = "";
+		if(mf.isEmpty()){
+			filename = "default.png";
+		} else {
+			filename = mf.getOriginalFilename();
 		}
+		System.out.println(filename);
 		int index = filename.lastIndexOf(".");
 		String fileName = filename.substring(0, index); 
 		String fileExt = filename.substring(index + 1);
@@ -124,7 +127,7 @@ public class AccountController {
 
 				return "account/uploadResult";
 
-			} else if (!file[1].equals("jpg") && !file[1].equals("gif") && !file[1].equals("png") && !file[1].equals("JPG")) {
+			} else if (!file[1].equals("jpg") && !file[1].equals("gif") && !file[1].equals("png") && !file[1].equals("JPG") && !file[1].equals("jpeg")) {
 
 				result = 2;
 				model.addAttribute("result", result);
@@ -134,31 +137,36 @@ public class AccountController {
 
 		}
 		UUID uuid = UUID.randomUUID();
-		String newFileName = uuid.toString()+"_"+filename;
-		logger.info("newFileName : " + newFileName );
-		File newfile = new File(path + "/" + newFileName);
-		logger.info("newfile : "+newfile);
-		if (size > 0) { 
-			mf.transferTo(newfile);
+		String newFileName = "";
+		if(filename.equals("default.png")){
+			newFileName = filename;
+		} else {
+			newFileName = uuid.toString()+"_"+filename;
+			File newfile = new File(path + "/" + newFileName);
+
+			if (size > 0) { 
+				mf.transferTo(newfile);
+			}
+			String filePath = path+ "\\" + newFileName;
+			logger.info("filePath : "+filePath);
+			
+			BufferedImage Img = ImageIO.read(new File(filePath));
+			int dw = 200, dh = 200; 
+			int ow = Img.getWidth(); 
+			int oh = Img.getHeight(); 
+			int nw = ow; int nh = (ow * dh) / dw; 
+			if(nh > oh) { 
+				nw = (oh * dw) / dh; nh = oh; 
+			}
+			BufferedImage croped = Scalr.crop(Img, (ow-nw)/2, (oh-nh)/2, nw, nh);
+			BufferedImage reImg = Scalr.resize(croped, dw, dh);
+			
+			String thumbName = path+"\\"+uuid.toString()+"_THUMB_"+fileName+"."+fileExt;
+			logger.info("thumbName : "+thumbName);
+			File thumbFile = new File(thumbName);
+			ImageIO.write(reImg, fileExt, thumbFile);
 		}
-		String filePath = path+ "\\" + newFileName;
-		logger.info("filePath : "+filePath);
 		
-		BufferedImage Img = ImageIO.read(new File(filePath));
-		int dw = 200, dh = 200; 
-		int ow = Img.getWidth(); 
-		int oh = Img.getHeight(); 
-		int nw = ow; int nh = (ow * dh) / dw; 
-		if(nh > oh) { 
-			nw = (oh * dw) / dh; nh = oh; 
-		}
-		BufferedImage croped = Scalr.crop(Img, (ow-nw)/2, (oh-nh)/2, nw, nh);
-		BufferedImage reImg = Scalr.resize(croped, dw, dh);
-		
-		String thumbName = path+"\\"+uuid.toString()+"_THUMB_"+fileName+"."+fileExt;
-		logger.info("thumbName : "+thumbName);
-		File thumbFile = new File(thumbName);
-		ImageIO.write(reImg, fileExt, thumbFile);
 		
 		String id = (String)session.getAttribute("id");
 		memberDTO mem = service.findpwd(id);
@@ -226,15 +234,20 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/mypage.do")
-	public String mypage(HttpSession session, Model model) {
+	public String mypage(HttpSession session, Model model,HttpServletResponse response) throws IOException {
 		String id = "";
 		if (session.getAttribute("id") != null) {
 			id = (String) session.getAttribute("id");
 		} else {
-			id = "err";
+			id = "";
+			response.sendRedirect("login.do");
 		}
+		ArrayList<Board> list = new ArrayList<Board>();
+		ArrayList<Board> board = page_service.getBoardList(id);
+		
 		memberDTO dto = service.findpwd(id);
 		model.addAttribute("dto", dto);
+		model.addAttribute("board", board);
 		return "account/mypage";
 	}
 
@@ -289,10 +302,14 @@ public class AccountController {
 				session.setAttribute("dto", dto);
 				ArrayList<FollowDTO> fol_dto = follow_service.searchFollow(userid);
 				ArrayList<Board> list = new ArrayList<Board>();
+				ArrayList<memberDTO> mem_dto = new ArrayList<memberDTO>();
 				for(int i = 0; i < fol_dto.size(); i++){
-					list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
+					list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id()));
 				}
-				
+				for(int i = 0; i < list.size(); i++){
+					mem_dto.add(service.findpwd(list.get(i).getId()));
+				}
+				model.addAttribute("mem_dto",mem_dto);
 				model.addAttribute("list", list);
 				return "board/board_home";
 			} else {

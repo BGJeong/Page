@@ -22,7 +22,7 @@
 		where userid=#{userid}
 	</update>
 	<update id="member_delete" parameterType="String">
-		update member set reg_status=0, profile_img=null where userid = #{userid}
+		update member set reg_status=0 where userid = #{userid}
 	</update>
 	<select id="memberSearch" parameterType="String" resultType="member">
 		select * from member where userid like '%'||#{userid}||'%' and reg_status=1 and userid not in (#{userid})

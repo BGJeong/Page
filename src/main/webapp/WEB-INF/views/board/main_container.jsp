@@ -27,10 +27,9 @@
 						</h3>
 					</c:if>
 					<c:if test="${!empty list }">
-						<c:forEach var="a" items="${list}">
+						<c:forEach var="a" items="${list}" varStatus="status">
 							<article class="my-3 mx-5">
-								<div class="row">${a.no }</div>
-								<div class="row border""><img src="<%=request.getContextPath() %>/upload/${pimg}" style="width:2rem;">${a.id }</div>
+								<div class="row border""><a href="userView.do?uid=${a.id }"><img src="<%=request.getContextPath() %>/upload/${mem_dto[status.index].profile_img}" style="width:2rem;">${a.id }</a></div>
 								<!-- 이름 -->
 								<div class="row border">
 									<!-- contents -->
