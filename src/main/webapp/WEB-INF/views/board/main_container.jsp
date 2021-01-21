@@ -29,7 +29,7 @@
 					<c:if test="${!empty list }">
 						<c:forEach var="a" items="${list}" varStatus="status">
 							<article class="my-3 mx-5">
-								<div class="row border""><a href="userView.do?uid=${a.id }"><img src="<%=request.getContextPath() %>/upload/${mem_dto[status.index].profile_img}" style="width:2rem;">${a.id }</a></div>
+								<div class="row border""><a href="userView.do?uid=${a.id }" style="pointer-events: none; display: inline-block;text-decoration:none;color:black;"><img src="<%=request.getContextPath() %>/upload/${mem_dto[status.index].profile_img}" style="width:2rem;" class="rounded-circle">${a.id }</a></div>
 								<!-- 이름 -->
 								<div class="row border">
 									<!-- contents -->

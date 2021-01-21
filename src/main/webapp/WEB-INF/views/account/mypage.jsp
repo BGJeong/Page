@@ -52,9 +52,9 @@
 							<c:forEach var="a" items="${board}">
 								<article class="my-3 mx-5">
 									<div class="row border"">
-										<a href="userView.do?uid=${a.id }" style="pointer-events: none; display: inline-block;"><img
+										<a href="userView.do?uid=${a.id }" style="pointer-events: none; display: inline-block;text-decoration:none;color:black;" ><img
 											src="<%=request.getContextPath() %>/upload/${pimg}"
-											style="width: 2rem;">${a.id }</a>
+											style="width: 2rem;"class="rounded-circle" >${a.id }</a>
 									</div>
 									<!-- 이름 -->
 									<div class="row border">
