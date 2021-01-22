@@ -190,11 +190,11 @@ body {
 											<div
 												class="d-flex justify-content-between align-items-center">
 												<div class="mr-2">
-													<img src="<%=request.getContextPath() %>/upload/${a.profile_img}"
+													<img src="<%=request.getContextPath() %>/upload/${userdto.profile_img}"
 														width="45" class="rounded-circle">
 												</div>
 												<div class="ml-2">
-													<div class="h5 m-0">@${a.id }</div>
+													<div class="h5 m-0">${a.id }</div>
 													<div class="h7 text-muted">${a.name}</div>
 												</div>
 											</div>

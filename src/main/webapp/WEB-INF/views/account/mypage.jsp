@@ -10,6 +10,35 @@
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 <style>
 body {
+	background-color: #eeeeee;
+}
+
+.h7 {
+	font-size: 0.8rem;
+}
+
+.gedf-wrapper {
+	margin-top: 0.97rem;
+}
+
+@media ( min-width : 992px) {
+	.gedf-main {
+		padding-left: 4rem;
+		padding-right: 4rem;
+	}
+	.gedf-card {
+		margin-bottom: 2.77rem;
+	}
+}
+
+/**Reset Bootstrap*/
+.dropdown-toggle::after {
+	content: none;
+	display: none;
+}
+
+.img-fluid . max-width: 100 %; and height: auto ;
+body {
 	background: #f8f9fa;;
 }
 
@@ -146,7 +175,7 @@ body {
 					<!-- END SIDEBAR USER TITLE -->
 					<!-- SIDEBAR BUTTONS -->
 					<div class="profile-userbuttons">
-						
+
 						<a href="edit.do" class="btn btn-primary btn-sm">프로필 수정</a>
 						<div class="profile-userbuttons">
 							팔로잉<a href="following.do?userid=${dto.userid }"
@@ -188,50 +217,59 @@ body {
 						</c:if>
 						<c:if test="${!empty board }">
 							<c:forEach var="a" items="${board}">
-								<article class="my-3 mx-5">
-									<div class="row border"">
-										<a href="userView.do?uid=${a.id }"
-											style="pointer-events: none; display: inline-block; text-decoration: none; color: black;"><img
-											src="<%=request.getContextPath() %>/upload/${pimg}"
-											style="width: 2rem;" class="rounded-circle">${a.id }</a>
-									</div>
-									<!-- 이름 -->
-									<div class="row border">
-										<!-- contents -->
-										<div class="col">
-											<div class="row">${a.content }</div>
-											<c:if test="${!empty a.upload }">
-												<div class="row">
-													<img
-														src="<%=request.getContextPath() %>/upload/${a.upload}"
-														width="500px" />
+								<div class="card gedf-card">
+									<div class="card-header">
+										<div class="d-flex justify-content-between align-items-center">
+											<div
+												class="d-flex justify-content-between align-items-center">
+												<div class="mr-2">
+													<img src="<%=request.getContextPath() %>/upload/${pimg}"
+														width="45" class="rounded-circle">
 												</div>
-											</c:if>
+												<div class="ml-2">
+													<div class="h5 m-0">@${a.id }</div>
+													<div class="h7 text-muted">${a.name}</div>
+												</div>
+											</div>
+											<div>
+												<div class="dropdown">
+													<button class="btn btn-link dropdown-toggle" type="button"
+														id="gedf-drop1" data-toggle="dropdown"
+														aria-haspopup="true" aria-expanded="false">
+														<i class="fa fa-ellipsis-h"></i>
+													</button>
+													<div class="dropdown-menu dropdown-menu-right"
+														aria-labelledby="gedf-drop1">
+														<div class="h6 dropdown-header">Configuration</div>
+														<a class="dropdown-item" href="#">Save</a> <a
+															class="dropdown-item" href="#">Hide</a> <a
+															class="dropdown-item" href="#">Report</a>
+													</div>
+												</div>
+											</div>
 										</div>
+
 									</div>
-
-									<div class="row">
-										<!-- bottom_icons -->
-										<div class="col text-center">
-											<!-- 좋아요 -->
-											<a class="btn btn-white" href="good.do?no='${a.no}'"><img
-												src="./img/good.jpg" width="60%"></a>
-										</div>
-
-										<div class="col text-center">
-											<!-- 댓글달기 -->
-											<a class="btn btn-white" href="#"><img
-												src="./img/comment.jpg" width="60%"></a>
-										</div>
+									<div class="card-body">
+										<div class="text-muted h7 mb-2">
+											<i class="fa fa-clock-o"></i>${a.regdate }</div>
+										<c:if test="${!empty a.upload }">
+											<a class="card-link" href="#"> <!-- 제목 공간 --> <img
+												src="<%=request.getContextPath() %>/upload/${a.upload}"
+												class="img-fluid" />
+											</a>
+										</c:if>
+										<p class="card-text">${a.content }</p>
 									</div>
+									<div class="card-footer">
+										<a href="#" class="card-link"><i class="fa fa-gittip"></i>
+											Like</a> <a href="#" class="card-link"><i
+											class="fa fa-comment"></i> Comment</a> <a href="#"
+											class="card-link"><i class="fa fa-mail-forward"></i>
+											Share</a>
+									</div>
+								</div>
 
-									<div class="row border">좋아요 ${a.goodcount }</div>
-									<!-- like -->
-									<div class="row border">comment_container</div>
-									<!-- comment_container -->
-									<div class="row border">comment_field</div>
-									<!-- comment_field -->
-								</article>
 							</c:forEach>
 						</c:if>
 					</div>

@@ -42,26 +42,7 @@ body {
 <div class="container-fluid gedf-wrapper">
         <div class="row">
             <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <!-- <div class="h5">@LeeCross</div>
-                        <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
-                        <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
-                            etc.
-                        </div> -->
-                    </div>
-                    <ul class="<!-- list-group list-group-flush -->">
-                        <!-- <li class="list-group-item">
-                            <div class="h6 text-muted">Followers</div>
-                            <div class="h5">5.2342</div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="h6 text-muted">Following</div>
-                            <div class="h5">6758</div>
-                        </li>
-                        <li class="list-group-item">Vestibulum at eros</li> -->
-                    </ul>
-                </div>
+            	<!-- 왼쪽 사이드바 -->
             </div>
             <div class="col-md-6 gedf-main">
 				
@@ -133,7 +114,7 @@ body {
                                     <img src="<%=request.getContextPath() %>/upload/${mem_dto[status.index].profile_img}" width="45" class="rounded-circle">
                                 </div>
                                 <div class="ml-2">
-                                    <div class="h5 m-0">@${a.id }</div>
+                                    <div class="h5 m-0"><a style="color: #3c3d3f;text-decoration: none;" href="userView.do?uid=${a.id }">@${a.id }</a></div>
                                     <div class="h7 text-muted">${a.name}</div>
                                 </div>
                             </div>

@@ -367,6 +367,9 @@ public class AccountController {
 	public String userView(@RequestParam("uid") String uid, Model model){
 		logger.info(uid);	
 		memberDTO dto = service.findpwd(uid);
+		ArrayList<Board> board = page_service.getBoardList(uid);
+		
+		model.addAttribute("board", board);
 		model.addAttribute("userdto", dto);
 		return "account/userView";
 	}
