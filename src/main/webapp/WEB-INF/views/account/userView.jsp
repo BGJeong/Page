@@ -172,7 +172,73 @@ body {
 			</div>
 			<div class="col-md-9">
             <div class="profile-content">
-			   Some user related content goes here...
+			   <div class="col">
+						<!-- 리스트 -->
+						<article class="my-3 mx-5">
+							<div class="row">
+								<h3>이 유저의 글 목록</h3>
+							</div>
+						</article>
+						<c:if test="${empty board}">
+							<h3>작성한 글이 없습니다</h3>
+						</c:if>
+						<c:if test="${!empty board }">
+							<c:forEach var="a" items="${board}">
+								<div class="card gedf-card">
+									<div class="card-header">
+										<div class="d-flex justify-content-between align-items-center">
+											<div
+												class="d-flex justify-content-between align-items-center">
+												<div class="mr-2">
+													<img src="<%=request.getContextPath() %>/upload/${a.profile_img}"
+														width="45" class="rounded-circle">
+												</div>
+												<div class="ml-2">
+													<div class="h5 m-0">@${a.id }</div>
+													<div class="h7 text-muted">${a.name}</div>
+												</div>
+											</div>
+											<div>
+												<div class="dropdown">
+													<button class="btn btn-link dropdown-toggle" type="button"
+														id="gedf-drop1" data-toggle="dropdown"
+														aria-haspopup="true" aria-expanded="false">
+														<i class="fa fa-ellipsis-h"></i>
+													</button>
+													<div class="dropdown-menu dropdown-menu-right"
+														aria-labelledby="gedf-drop1">
+														<div class="h6 dropdown-header">Configuration</div>
+														<a class="dropdown-item" href="#">Save</a> <a
+															class="dropdown-item" href="#">Hide</a> <a
+															class="dropdown-item" href="#">Report</a>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+									<div class="card-body">
+										<div class="text-muted h7 mb-2">
+											<i class="fa fa-clock-o"></i>${a.regdate }</div>
+										<c:if test="${!empty a.upload }">
+											<a class="card-link" href="#"> <!-- 제목 공간 --> <img
+												src="<%=request.getContextPath() %>/upload/${a.upload}"
+												class="img-fluid" />
+											</a>
+										</c:if>
+										<p class="card-text">${a.content }</p>
+									</div>
+									<div class="card-footer">
+										<a href="#" class="card-link"><i class="fa fa-gittip"></i>
+											Like</a> <a href="#" class="card-link"><i
+											class="fa fa-comment"></i> Comment</a> <a href="#"
+											class="card-link"><i class="fa fa-mail-forward"></i>
+											Share</a>
+									</div>
+								</div>
+
+							</c:forEach>
+						</c:if>
             </div>
 		</div>
 
