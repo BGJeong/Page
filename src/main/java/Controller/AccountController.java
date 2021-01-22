@@ -257,26 +257,64 @@ public class AccountController {
 		return "redirect:index.jsp";
 	}
 
-	@RequestMapping(value = "/callback.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String callback(Model model, @RequestParam String code, @RequestParam String state, HttpSession session)
+	@RequestMapping(value = "callback.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String callback(Model model, @RequestParam String code, @RequestParam String state, HttpSession session, memberDTO member)
 			throws IOException, ParseException {
+//		OAuth2AccessToken oauthToken;
+//		oauthToken = naverLoginBO.getAccessToken(session, code, state);
+//		apiResult = naverLoginBO.getUserProfile(oauthToken);
+//		logger.info(apiResult);
+//		JSONParser parser = new JSONParser();
+//		Object obj = parser.parse(apiResult);
+//		JSONObject jsonObj = (JSONObject) obj;
+//		JSONObject response_obj = (JSONObject) jsonObj.get("response");
+//		String nickname = (String) response_obj.get("name");
+//		String email = (String) response_obj.get("eamil");
+//		System.out.println(nickname);
+//		System.out.println(email);
+//		session.setAttribute("id", nickname);
+//		session.setAttribute("email", email);
+//		model.addAttribute("result", apiResult);
+		System.out.println("callback");
 		OAuth2AccessToken oauthToken;
 		oauthToken = naverLoginBO.getAccessToken(session, code, state);
-		apiResult = naverLoginBO.getUserProfile(oauthToken);
-		logger.info(apiResult);
+		//1. 로그인 사용자 정보를 읽어온다.
+		apiResult = naverLoginBO.getUserProfile(oauthToken); // String형식의 json데이터
+		
+		//2. String형식인 apiResult를 json형태로 바꿈
 		JSONParser parser = new JSONParser();
 		Object obj = parser.parse(apiResult);
 		JSONObject jsonObj = (JSONObject) obj;
+		//3. 데이터 파싱
+		//Top레벨 단계 _response 파싱
 		JSONObject response_obj = (JSONObject) jsonObj.get("response");
-		String nickname = (String) response_obj.get("name");
-		String email = (String) response_obj.get("eamil");
-		System.out.println(nickname);
-		System.out.println(email);
-		session.setAttribute("id", nickname);
-		session.setAttribute("email", email);
-		model.addAttribute("result", apiResult);
-
-		return "account/home";
+				//response의 nickname값 파싱
+		System.out.println(response_obj.toString());
+		//이메일 추출
+		String email = (String) response_obj.get("email");
+		String nickname = (String) response_obj.get("nickname");
+		//가입된user인지 email로 확인
+		memberDTO dto = service.userInfoEmail(email);
+		//가입유저다?
+		if(dto!= null) {
+			String userid = dto.getUserid();
+			//id로 세션발행
+			session.setAttribute("id", userid);
+			session.setAttribute("pimg", dto.getProfile_img());
+			session.setAttribute("dto", dto);
+			//my페이지로
+			return "account/home";
+		
+		//신규유저 join으로 보냄 id,nickname
+		}else if(dto == null) {
+			member.setEmail(email);
+			member.setNickname(nickname);
+			model.addAttribute("member", member);
+			
+			return "account/join";
+		}
+		return "";
+		
 	}
 
 	@RequestMapping(value = "/header.do")
@@ -374,127 +412,125 @@ public class AccountController {
 		return "account/userView";
 	}
 	
-	//id 李얘린 �씠硫붿씪 �솗�씤
-		@RequestMapping("idfindcheck.do")
-		public String idfindcheck(memberDTO member, Model model, RedirectAttributes rda) {
-			int result = 0;
-			String email = member.getEmail();
-			memberDTO dbmember = service.userInfoEmail(email);
-			if(dbmember!=null) {
-				result = 1;
-				String mailtype = "idfind";
-				rda.addFlashAttribute("member",dbmember);
-				rda.addFlashAttribute("result",result);
-				
-				System.out.println("id�엳�뼱");
-				System.out.println("id : "+dbmember.getUserid());
-				
-				//id瑜� 硫붿씪濡� 蹂대궡湲�
-				return "redirect:sendemail.do?mailtype="+mailtype;
-				
-			}else {
-				model.addAttribute("result", result);
-				
-			}
+	@RequestMapping("idfindcheck.do")
+	public String idfindcheck(memberDTO member, Model model, RedirectAttributes rda) {
+		int result = 0;
+		String email = member.getEmail();
+		memberDTO dbmember = service.userInfoEmail(email);
+		System.out.println(dbmember.getEmail());
+		System.out.println(dbmember.getUserid());
+		if(dbmember!=null) {
+			result = 1;
 			
+			rda.addFlashAttribute("result",result);
 			
-			return"account/emailfindfesult";
+			System.out.println("id�엳�뼱");
+			System.out.println("id : "+dbmember.getUserid());
+			
+			//id瑜� 硫붿씪濡� 蹂대궡湲�
+			return "redirect:sendemail.do?mailtype=idfind&useremail="+email;
+			
+		}else {
+			model.addAttribute("result", result);
+			
 		}
 		
+		
+		return"account/emailfindfesult";
+	}
 		
 		//pw 李얘린 �쉶�썝 �솗�씤
-		@RequestMapping("pwfind.do")
-		public String pwfindcheck(memberDTO member, Model model, RedirectAttributes rda) {
-			int result = 0;
-			String userid = member.getUserid();
-			memberDTO dbmember = service.userInfoId(userid);
-			
-			if(dbmember!=null) {
-				String mailtype = "pwfind";
-				if(member.getEmail().equals(dbmember.getEmail()) && member.getUserid().equals(dbmember.getUserid())) {
-					System.out.println("�븘�뵒�뵒 emamil �젙�솗");
-					System.out.println("id : "+dbmember.getUserid());
+				@RequestMapping("pwfind.do")
+				public String pwfindcheck(memberDTO member, Model model, RedirectAttributes rda) {
+					int result = 0;
+					String userid = member.getUserid();
+					memberDTO dbmember = service.userInfoId(userid);
 					
-					//臾댁옉�쐞 �븫�샇 �깮�꽦
-					StringBuffer newpasswd	 = new StringBuffer();
-					Random rnd = new Random();
-					for (int i = 0; i < 20; i++) {
-					    int rIndex = rnd.nextInt(3);
-					    switch (rIndex) {
-					    case 0:
-					        // a-z
-					    	newpasswd.append((char) ((int) (rnd.nextInt(26)) + 97));
-					        break;
-					    case 1:
-					        // A-Z
-					    	newpasswd.append((char) ((int) (rnd.nextInt(26)) + 65));
-					        break;
-					    case 2:
-					        // 0-9
-					    	newpasswd.append((rnd.nextInt(10)));
-					        break;
-					    }
+					if(dbmember!=null) {
+						String mailtype = "pwfind";
+						if(member.getEmail().equals(dbmember.getEmail()) && member.getUserid().equals(dbmember.getUserid())) {
+							
+							//臾댁옉�쐞 �븫�샇 �깮�꽦
+							StringBuffer newpasswd	 = new StringBuffer();
+							Random rnd = new Random();
+							for (int i = 0; i < 20; i++) {
+							    int rIndex = rnd.nextInt(3);
+							    switch (rIndex) {
+							    case 0:
+							        // a-z
+							    	newpasswd.append((char) ((int) (rnd.nextInt(26)) + 97));
+							        break;
+							    case 1:
+							        // A-Z
+							    	newpasswd.append((char) ((int) (rnd.nextInt(26)) + 65));
+							        break;
+							    case 2:
+							        // 0-9
+							    	newpasswd.append((rnd.nextInt(10)));
+							        break;
+							    }
+							}
+							
+							//Stringbuffer - String �삎蹂��솚
+							String passwd = newpasswd.toString();
+							
+							dbmember.setPasswd(passwd);
+							
+							//�븫�샇 �뾽�뜲�씠�듃
+							result = service.rdpasswd(dbmember);
+							
+							System.out.println("pw�닔�젙"+result);
+							
+							//rda.addFlashAttribute("member1", dbmember);
+							rda.addFlashAttribute("result",result);
+							
+							
+							//id瑜� 硫붿씪濡� 蹂대궡湲�
+							return "redirect:sendemail.do?mailtype=pwfind&useremail="+dbmember.getEmail();
+							
+						}else {
+							System.out.println("�븘�씠�뵒 �삉�뒗 �씠硫붿씪 ��由�");
+							result = 2;
+						}
+						
+						
+					}else {
+						model.addAttribute("result", result);
+						
 					}
 					
-					//Stringbuffer - String �삎蹂��솚
-					String passwd = newpasswd.toString();
 					
-					dbmember.setPasswd(passwd);
-					
-					//�븫�샇 �뾽�뜲�씠�듃
-					result = service.rdpasswd(dbmember);
-					
-					System.out.println("pw�닔�젙"+result);
-					
-					rda.addFlashAttribute("member",dbmember);
-					rda.addFlashAttribute("result",result);
-					
-					
-					//id瑜� 硫붿씪濡� 蹂대궡湲�
-					return "redirect:sendemail.do?mailtype=pwfind";
-					
-				}else {
-					System.out.println("�븘�씠�뵒 �삉�뒗 �씠硫붿씪 ��由�");
-					result = 2;
+					return"account/pwfindresult";
 				}
 				
-				
-			}else {
-				model.addAttribute("result", result);
-				
-			}
-			
-			
-			return"account/pwfindresult";
-		}
 		
-		//id 李얘린 �씠硫붿씪 蹂대궡湲�
 		@RequestMapping("sendemail.do")
-		public String send(Model model, memberDTO member, String mailtype) {
+		public String send(Model model, String mailtype, String useremail) {
 			// Mail Server �꽕�젙
+			memberDTO member = service.userInfoEmail(useremail);;
 			String charSet = "utf-8";
 			String hostSMTP = "smtp.naver.com";
 			String hostSMTPid = "";		// id
-			String hostSMTPpwd = ""; 	// 鍮꾨�踰덊샇
+			String hostSMTPpwd = ")"; 	// 鍮꾨�踰덊샇
 
 			
 			String fromEmail = "";	// 蹂대궡�뒗 硫붿씪紐�
-			String fromName = "page �슫�쁺��";
+			String fromName = "page 관리자";
 			
 			String subject = null;
 			String msg = null;
 			
 			if(mailtype.equals("idfind")) {
-				subject = "Page id 硫붿씪�엯�땲�떎.";
-				msg = "<p align = 'center'>"+member.getNickname()+"�떂�쓽 page id�뒗 �븘�옒�� 媛숈뒿�땲�떎.</p><br>" 
+				subject = "Page id 안내메일입니다.";
+				msg = "<p align = 'center'>"+member.getNickname()+"님의 page id는 아래와 같습니다.</p><br>" 
 						   + "<div align='center'> id : " + member.getUserid() + "</div>";
 			}
 			
 			if(mailtype.equals("pwfind")) {
-				subject = "Page�쓽 �깉 鍮꾨�踰덊샇媛� 諛쒓툒�릺�뿀�뒿�땲�떎.";
-				msg = "<p align = 'center'>"+member.getNickname()+"�떂�쓽 page �엫�떆 鍮꾨�踰덊샇�엯�땲�떎.</p><br>" 
-						+ "<div align='center'> �엫�떆 鍮꾨�踰덊샇 : " + member.getPasswd() + "</div>"
-						+"<p align = 'center'>諛섎뱶�떆 濡쒓렇�씤 �썑 蹂�寃쏀빐二쇱꽭�슂.</p><br>"; 
+				subject = "Page의 임시 비밀번호가 발급되었습니다..";
+				msg = "<p align = 'center'>"+member.getNickname()+"님의 page 임시비밀번호는 아래와 같습니다.</p><br>" 
+						+ "<div align='center'> 임시 비밀번호 : " + member.getPasswd() + "</div>"
+						+"<p align = 'center'>반드시 로그인 후 변경해주세요.</p><br>"; 
 			}
 			
 			// 諛쏅뒗 �궗�엺 E-Mail 二쇱냼
