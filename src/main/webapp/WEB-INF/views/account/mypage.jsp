@@ -175,8 +175,6 @@ body {
 					<!-- END SIDEBAR USER TITLE -->
 					<!-- SIDEBAR BUTTONS -->
 					<div class="profile-userbuttons">
-
-						<a href="edit.do" class="btn btn-primary btn-sm">프로필 수정</a>
 						<div class="profile-userbuttons">
 							팔로잉<a href="following.do?userid=${dto.userid }"
 								class="btn btn-outline-dark following btn-sm"></a> 팔로워<a
@@ -184,8 +182,6 @@ body {
 								class="btn btn-outline-dark follower btn-sm"></a>
 						</div>
 						<div class="profile-userbuttons">
-							<a href="logout.do" class="btn btn-dark">로그아웃</a> <a
-								href="retire.do" class="btn btn-danger">회원 탈퇴</a>
 						</div>
 					</div>
 					<!-- END SIDEBAR BUTTONS -->

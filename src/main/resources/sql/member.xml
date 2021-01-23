@@ -17,7 +17,7 @@
 		select * from member where userid = #{userid}
 	</select>
 	<update id="member_edit" parameterType="member">
-		update member set passwd=#{passwd}, email=#{email}, profile_img=#{profile_img, jdbcType=VARCHAR},
+		update member set email=#{email}, profile_img=#{profile_img, jdbcType=VARCHAR},
 		nickname=#{nickname, jdbcType=VARCHAR}, birth=#{birth, jdbcType=VARCHAR}  
 		where userid=#{userid}
 	</update>
@@ -63,4 +63,10 @@
     <select id="mail_check" parameterType="String" resultType="member">
 		select * from member where email=#{mail} and reg_status=1
 	</select>
+	<update id="editPass" parameterType="member">
+		update member set passwd=#{passwd} where userid=#{userid} 
+	</update>
+	<update id="member_ecupdate" parameterType="String"> <!-- 이메일 인증완료! -->
+		update member set email_conf=1 where email=#{email}
+	</update>
 </mapper>

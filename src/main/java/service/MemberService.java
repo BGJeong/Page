@@ -20,4 +20,6 @@ public interface MemberService {
 	public memberDTO userInfoId(String userid) throws Exception;
 	public int rdpasswd(memberDTO member) throws Exception;
 	public int checkMail(String mail) throws Exception;
+	public void editPass(memberDTO dto) throws Exception;
+	public void ecupdate(String email) throws Exception;	// 메일 인증부분
 }

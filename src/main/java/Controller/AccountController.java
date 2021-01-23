@@ -3,6 +3,7 @@ package Controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +105,6 @@ public class AccountController {
 		} else {
 			filename = mf.getOriginalFilename();
 		}
-		System.out.println(filename);
 		int index = filename.lastIndexOf(".");
 		String fileName = filename.substring(0, index); 
 		String fileExt = filename.substring(index + 1);
@@ -176,12 +176,43 @@ public class AccountController {
 			dto.setProfile_img(mem.getProfile_img());
 		}
 		dto.setUserid(id);
-		
+		System.out.println(dto.getBirth());
 		service.edit(dto);
 		session.setAttribute("pimg", dto.getProfile_img());
-		return "redirect:mypage.do";
+		return "redirect:edit.do";
 	}
 
+	@RequestMapping(value="/editPass.do")
+	public String editPass(){
+		return "account/editPass";
+	}
+	@RequestMapping(value="/editPass_ok.do")
+	public String editPass_ok(@RequestParam("passwd_now") String passwd_now, 
+							@RequestParam("passwd") String passwd,
+							@RequestParam("passwd_cf") String passwd_cf, HttpSession session, Model model) throws Exception{
+		int result = 0;
+		System.out.println(passwd_now);
+		System.out.println(passwd);
+		System.out.println(passwd_cf);
+		String id = (String)session.getAttribute("id");
+		memberDTO dto = service.findpwd(id);
+		if(passwd_now.equals(dto.getPasswd())){
+			if(passwd.equals(passwd_cf)){
+				dto.setPasswd(passwd);
+				service.editPass(dto);
+				model.addAttribute("result", result);
+				return "account/editPassResult";
+			} else{
+				result = 1;
+				model.addAttribute("result", result);
+				return "account/editPassResult";
+			}
+		} else {
+			result = 2;
+			model.addAttribute("result", result);
+			return "account/editPassResult";
+		}
+	}
 	@RequestMapping(value = "/edit.do")
 	public String edit(HttpSession session, Model model) {
 		String userid = "";
@@ -368,12 +399,48 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/joinAction.do", method = RequestMethod.POST)
-	public String joinAction(@ModelAttribute("dto") memberDTO dto) throws Exception {
+	public String joinAction(@ModelAttribute("dto") memberDTO dto, Model model) throws Exception {
 
-		service.insert(dto);
-
-		return "account/login";
+service.insert(dto);
+		
+		String keys ="";
+		int key;
+			for(int i=0; i<4; i++ ) {
+				key = (int)(Math.random()*9+1);
+				keys += key;
+			}
+			System.out.println(keys);
+			try {
+				HtmlEmail mail = new HtmlEmail();
+				mail.setDebug(true);
+				mail.setCharset("utf-8");
+				mail.setSSL(true);
+				mail.setHostName("smtp.naver.com");
+				mail.setSmtpPort(587);
+				
+				mail.setAuthentication("aw1530@naver.com", "page1530"); //관리자 이메일 비밀번호
+				mail.setTLS(true);
+				mail.addTo(dto.getEmail(), "utf-8");// 받는사람 메일
+				mail.setFrom("aw1530@naver.com", "운영자", "utf-8");	//보내는 메일
+				mail.setSubject("인증번호 발송");
+				mail.setHtmlMsg("<p align = 'center'>이메일 인증번호</p><br>"+"<p align = 'center'>인증번호 :</p>" + keys);			
+				mail.send();
+				
+			}catch(Exception e) {
+				System.out.println(e);
+			}
+				model.addAttribute("keys", keys);
+		return "account/injeng";
 	}
+	
+	// 메일 인증완료
+		@RequestMapping(value= "ecupdate.do")
+		@ResponseBody
+		public String ecupdate(String email) {
+			service.ecupdate(email);
+			System.out.println("email"+email);
+			return "account/injengResult";
+		}
 
 	@RequestMapping(value = "idcheck.do")
 	public String idcheck(@RequestParam("username") String id, Model model) {

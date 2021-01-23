@@ -54,4 +54,10 @@ public class MemberServiceImpl implements MemberService {
 	public int checkMail(String mail) throws Exception{
 		return dao.checkMail(mail);
 	}
+	public void editPass(memberDTO dto) throws Exception {
+		dao.editPass(dto);
+	}
+	public void ecupdate(String email) { //이메일 인증업데이트
+		dao.ecupdate(email);
+	}
 }

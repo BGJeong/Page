@@ -67,13 +67,7 @@
 					</div>
 					<label class="email_label" style="display: none;"></label>
 				</div>
-				<div class="col-4">
-					<div>_</div>
-					<div class="">
-						<button name="email_check" class="btn btn-dark"
-							onclick="email_check()">이메일 확인</button>
-					</div>
-				</div>
+
 			</div>
 			<div class="row mt-3">
 				<div class="col-4"></div>

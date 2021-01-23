@@ -1,13 +1,52 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script class="jsbin"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
+.profile-img {
+	text-align:center;
+}
+
+.profile-img img {
+	width: 70%;
+	height: 100%;
+}
+
+.profile-img .file {
+	position: relative;
+	overflow: hidden;
+	margin-top: -20%;
+	width: 70%;
+	border: none;
+	border-radius: 0;
+	font-size: 15px;
+	background: #212529b8;
+}
+
+.profile-img .file input {
+	position: absolute;
+	opacity: 0;
+	right: 0;
+	top: 0;
+}
+.dropdown-toggle::after {
+	content: none;
+}
+
 body {
 	font-family: sans-serif;
 	background-color: #eeeeee;
@@ -126,76 +165,93 @@ body {
 </style>
 </head>
 <body>
-	<form name="file_up" method="post" action="edit_ok.do" enctype="multipart/form-data">
-		<div class="container mt-3" align="center">
-			<h3>프로필 편집</h3>
+	<form method="post" action="edit_ok.do"
+		enctype="multipart/form-data" class="mt-3">
+		<div class="container">
 			<div class="row">
-				<div class="col-4">사진</div>
-				<div class="col-4">
-					<div class="file-upload">
-						<div class="image-upload-wrap">
-							<input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*"  name="profile"/>
-							<div class="drag-text">
-								<h3>+</h3>
+				<div class="col-md-3 ">
+					<div class="list-group ">
+						<a href="edit.do"
+							class="list-group-item list-group-item-action active">프로필 수정</a>
+						<a href="editPass.do"
+							class="list-group-item list-group-item-action">비밀번호 변경</a>
+						<a href="retire.do"
+							class="list-group-item list-group-item-action">회원 탈퇴</a>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Your Profile</h4>
+									<hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-4">
+										
+									</div>
+									<div class="form-group row">
+										<label for="username" class="col-4 col-form-label">Profile Image</label>
+										<div class="col-8">
+											<div class="profile-img col-8">
+											<img
+												src="<%=request.getContextPath() %>/upload/${dto.profile_img}"
+												alt=""/ class="profileimg">
+											<div class="file btn btn-lg btn-primary">
+												Change Photo <input type="file" onchange="readURL(this);" accept="image/*"  name="profile" />
+											</div>
+										</div>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="username" class="col-4 col-form-label">User
+											ID</label>
+										<div class="col-8">
+											<input value="${dto.userid }" id="username" name="userid"
+												placeholder="Username" class="form-control here"
+												required="required" type="text" readonly>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="text" class="col-4 col-form-label">Nick
+											Name</label>
+										<div class="col-8">
+											<input value="${dto.nickname }" id="text" name="nickname"
+												placeholder="Nick Name" class="form-control here"
+												type="text">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="birth" class="col-4 col-form-label">birth</label>
+										<div class="col-8">
+											<input value="${dto.birth }" id="birth" name="birth"
+												placeholder="birth" class="form-control here"
+												type="date" value="0000-00-00">
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="email" class="col-4 col-form-label">email</label>
+										<div class="col-8">
+											<input value="${dto.email }" id="email" name="email"
+												placeholder="Email" class="form-control here"
+												required="required" type="text" readonly>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="offset-4 col-8">
+										<button name="submit" type="submit" class="btn btn-primary">프로필
+											저장하기</button>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="file-upload-content">
-							<img class="file-upload-image" src="#" alt="your image" />
-							<div class="image-title-wrap">
-								<button type="button" onclick="removeUpload()" class="remove-image">
-									지우기 <span class="image-title">Uploaded Image</span>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4">
-						<span>아이디</span>
-					</div>
-					<div class="col-4">
-						<input name="userid" type="text" class="form-control" value="${dto.userid }" readonly>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4">
-						<span>비밀번호</span>
-					</div>
-					<div class="col-4">
-						<input name="passwd" type="text" class="form-control" value="${dto.passwd }">
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4">
-						<span>이메일</span>
-					</div>
-					<div class="col-4">
-						<input name="email" type="text" class="form-control" value="${dto.email }">
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4">
-						<span>닉네임</span>
-					</div>
-					<div class="col-4">
-						<input name="nickname" type="text" class="form-control" value="${dto.nickname }">
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-4">
-						<span>생일</span>
-					</div>
-					<div class="col-4">
-						<input name="birth" type="text" class="form-control" value="${dto.birth }">
-					</div>
-				</div>
 
-			</div>
-			<div class="row">
-				<input type="submit" class="btn btn-primary"  value="저장">
-			
-			</div>
-		</div>
+					</div>
+				</div>
 	</form>
 </body>
 <script>
@@ -205,16 +261,9 @@ body {
 			var reader = new FileReader();
 
 			reader.onload = function(e) {
-				$('.image-upload-wrap').hide();
-
-				$('.file-upload-image').attr('src', e.target.result);
-				$('.file-upload-content').show();
-
-				$('.image-title').html(input.files[0].name);
+				$('.profileimg').attr('src', e.target.result);
 			};
-
 			reader.readAsDataURL(input.files[0]);
-
 		} else {
 			removeUpload();
 		}
