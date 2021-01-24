@@ -184,7 +184,7 @@ body {
 						</c:if>
 						<c:if test="${!empty board }">
 							<c:forEach var="a" items="${board}">
-								<div class="card gedf-card">
+								<div class="card gedf-card"  style="position:unset;">
 									<div class="card-header">
 										<div class="d-flex justify-content-between align-items-center">
 											<div

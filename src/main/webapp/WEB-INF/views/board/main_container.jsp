@@ -8,33 +8,33 @@
 <title>Insert title here</title>
 <style>
 body {
-            background-color: #eeeeee;
+	background-color: #eeeeee;
+}
+.h7 {
+	font-size: 0.8rem;
+}
+.gedf-wrapper {
+	margin-top: 0.97rem;
+}
+@media (min-width: 992px) {
+	.gedf-main {
+    	padding-left: 4rem;
+        padding-right: 4rem;
         }
-
-        .h7 {
-            font-size: 0.8rem;
+        .gedf-card {
+        margin-bottom: 2.77rem;
         }
-
-        .gedf-wrapper {
-            margin-top: 0.97rem;
-        }
-
-        @media (min-width: 992px) {
-            .gedf-main {
-                padding-left: 4rem;
-                padding-right: 4rem;
-            }
-            .gedf-card {
-                margin-bottom: 2.77rem;
-            }
-        }
-
-        /**Reset Bootstrap*/
-        .dropdown-toggle::after {
-            content: none;
-            display: none;
-        }
-        .img-fluid. max-width: 100%; and height: auto;
+}
+/**Reset Bootstrap*/
+.dropdown-toggle::after {
+	content: none;
+	display: none;
+}
+.img-fluid. max-width: 100%; and height: auto;
+.card{
+	position:unset !important;
+}
+        
 </style>
 </head>
 <body>
@@ -47,7 +47,7 @@ body {
             <div class="col-md-6 gedf-main">
 				
                 <!--- \\\\\\\Post-->
-                <div class="card gedf-card">
+                <div class="card gedf-card" style="position:unset;">
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
