@@ -42,8 +42,10 @@ import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import DTO.Board;
 import DTO.FollowDTO;
+import DTO.LikeyDTO;
 import DTO.memberDTO;
 import service.FollowServiceImpl;
+import service.LikeyServiceImple;
 import service.MemberServiceImpl;
 import service.PageService;
 
@@ -58,7 +60,8 @@ public class AccountController {
 	private PageService page_service;
 	@Autowired
 	private FollowServiceImpl follow_service;
-
+	@Autowired
+	private LikeyServiceImple likey_service;
 	@Autowired
 	private void setNaverLoginBO(NaverLoginBO naverLoginBO) {
 		this.naverLoginBO = naverLoginBO;
@@ -359,28 +362,15 @@ public class AccountController {
 		memberDTO dto = service.login(userid);
 		if (dto == null) {
 			result = 1;
-			logger.info("dto=null");
 			model.addAttribute("result", result);
 			return "account/loginResult";
 		} else {
 			if (dto.getPasswd().equals(passwd)) {
-				logger.info("id : " + dto.getUserid());
-				logger.info("pass : "+dto.getPasswd());
 				session.setAttribute("id", userid);
 				session.setAttribute("pimg", dto.getProfile_img());
 				session.setAttribute("dto", dto);
-				ArrayList<FollowDTO> fol_dto = follow_service.searchFollow(userid);
-				ArrayList<Board> list = new ArrayList<Board>();
-				ArrayList<memberDTO> mem_dto = new ArrayList<memberDTO>();
-				for(int i = 0; i < fol_dto.size(); i++){
-					list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id()));
-				}
-				for(int i = 0; i < list.size(); i++){
-					mem_dto.add(service.findpwd(list.get(i).getId()));
-				}
-				model.addAttribute("mem_dto",mem_dto);
-				model.addAttribute("list", list);
-				return "board/board_home";
+
+				return "redirect:/board_home.do";
 			} else {
 				result = 1;
 				model.addAttribute("result", result);

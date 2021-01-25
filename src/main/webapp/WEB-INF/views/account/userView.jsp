@@ -251,45 +251,7 @@ body {
 	<center>
 		<strong>footer </strong>
 	</center>
-	<%-- <div class="mt-3 container-fluid" align="center">
-		<h3>상세정보</h3>
-		<div class="row align-items-start" style="width: 80%;">
-			<c:if test="${!empty userdto}">
-				<div class="col-sm-3">
-					<img
-						src="<%=request.getContextPath() %>/upload/${userdto.profile_img}"
-						style="width: 30%; height: 30%;" class="img-fluid rounded-circle">
-					<p>${userdto.userid }</p>
-				</div>
-				<div class="col">
-					<input type="button" class="btn btn-outline-dark btn-block"
-						value="팔로우" id="followBtn">
-				</div>
-				<div class="col">
-					<div>
-						팔로잉<a href="following.do?userid=${userdto.userid }"
-							class="btn btn-outline-dark following"></a>팔로워<a
-							href="follower.do?userid=${userdto.userid }"
-							class="btn btn-outline-dark follower"></a>
-					</div>
-				</div>
-			</c:if>
 
-			<c:if test="${empty userdto }">
-				<div class="col-sm-3">
-					<img src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/user_flat.png"
-						style="width: 30%; height: 30%;" class="img-fluid rounded-circle">
-					존재하지 않는 사용자입니다.
-				</div>
-			</c:if>
-
-
-
-			<div></div>
-		</div>
-	</div>
-	<hr>
- --%>
 </body>
 <script type="text/javascript">
 	$(function() {
@@ -372,7 +334,6 @@ body {
 			});
 		}
 		console.log("sessionid : " + sessionid)
-		var html = "<table class='table'>";
 		$.ajax({
 			url : "searchFollow.do",
 			type : "post",

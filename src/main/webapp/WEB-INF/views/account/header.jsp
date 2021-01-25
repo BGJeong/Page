@@ -109,12 +109,10 @@ body {
 				for(var i=0; i<msg.length; i++) {
 					uid=msg[i].userid;
 					upro = msg[i].profile_img;
-					path="<%=getServletContext().getRealPath("/").replace("\\", "\\\\")%>";
-					console.log(msg)
 					if(uid===sessionid){
 						continue;
 					} else {
-						html+="<tr><td><a href='userView.do?uid="+uid+"'><img src='https://cdn.jsdelivr.net/gh/bgjeong/cdn/user_flat2.png' style='width:2rem;' class='rounded-circle'>"+uid+"</td></tr></a>";
+						html+="<tr><td><a style='text-decoration:none; color:black;' href='userView.do?uid="+uid+"'><img src='upload/"+upro+"' style='width:2rem;' class='rounded-circle'>&nbsp;&nbsp;&nbsp;"+uid+"</td></tr></a>";
 					}
 				}
 				html+="</table>";

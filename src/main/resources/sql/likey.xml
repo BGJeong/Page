@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="likeyns">
+
+	<select id="likecheck" parameterType="likey" resultType="likey">
+		select * from likey where like_userid=#{like_userid} and like_bbsid=#{like_bbsid}
+	</select>
+	<delete id="delete_like" parameterType="Likey">
+		delete from likey where like_userid = #{like_userid} and like_bbsid= #{like_bbsid}
+	</delete>
+	<insert id="insert_like" parameterType="Likey">
+		insert into likey values(likey_seq.nextval, #{like_userid}, #{like_bbsid}, 0, sysdate )
+	</insert>
+</mapper>

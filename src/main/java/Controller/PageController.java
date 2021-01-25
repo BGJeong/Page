@@ -17,8 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import DTO.Board;
 import DTO.FollowDTO;
+import DTO.LikeyDTO;
 import DTO.memberDTO;
+import scala.collection.generic.BitOperations.Int;
 import service.FollowServiceImpl;
+import service.LikeyServiceImple;
 import service.MemberServiceImpl;
 import service.PageService;
 
@@ -31,6 +34,8 @@ public class PageController {
 	private FollowServiceImpl follow_service;
 	@Autowired
 	private MemberServiceImpl mem_service;
+	@Autowired
+	private LikeyServiceImple likey_service;
 	
 	@RequestMapping("good.do")
 	public String good() {
@@ -45,14 +50,20 @@ public class PageController {
 		ArrayList<FollowDTO> fol_dto = follow_service.searchFollow(userid);
 		ArrayList<Board> list = new ArrayList<Board>();
 		ArrayList<memberDTO> mem_dto = new ArrayList<memberDTO>();
+		ArrayList<LikeyDTO> likey = new ArrayList<LikeyDTO>();
+		LikeyDTO likeDTO = new LikeyDTO();
 		for(int i = 0; i < fol_dto.size(); i++){
 			list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
 		}
 		for(int i = 0; i < list.size(); i++){
 			mem_dto.add(mem_service.findpwd(list.get(i).getId()));
+			likeDTO.setLike_bbsid(list.get(i).getNo());
+			likeDTO.setLike_userid(userid);
+			likey.add(likey_service.likecheck(likeDTO));
 		}
 		model.addAttribute("mem_dto",mem_dto);
 		model.addAttribute("list", list);
+		model.addAttribute("likey", likey);
 		return "board/board_home";
 	}
 	
