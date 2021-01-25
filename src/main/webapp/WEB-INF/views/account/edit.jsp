@@ -180,7 +180,7 @@ body {
 					</div>
 				</div>
 				<div class="col-md-9">
-					<div class="card">
+					<div class="card" style="position:unset;">
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-12">
@@ -219,7 +219,7 @@ body {
 										<label for="text" class="col-4 col-form-label">Nick
 											Name</label>
 										<div class="col-8">
-											<input value="${dto.nickname }" id="text" name="nickname"
+											<input value="${dto.nickname }" id="nickname" name="nickname"
 												placeholder="Nick Name" class="form-control here"
 												type="text">
 										</div>
@@ -280,6 +280,7 @@ body {
 	$('.image-upload-wrap').bind('dragleave', function() {
 		$('.image-upload-wrap').removeClass('image-dropping');
 	});
+	
 </script>
 </html>
 

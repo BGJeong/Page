@@ -124,6 +124,11 @@ body {
 	border-color: #d4d4d4;
 	border-width: 0.5px;
 }
+.btn-outline-success:hover {
+    color: #41464b;
+    background-color: #f9fafb;
+    border-color: #f9fafb;
+}
 </style>
 </head>
 <body>
@@ -148,8 +153,7 @@ body {
 					<!-- END SIDEBAR USER TITLE -->
 					<!-- SIDEBAR BUTTONS -->
 					<div class="profile-userbuttons">
-						<button type="button" class="btn btn-outline-success btn-sm" id="followBtn">Follow</button>
-						<a href="edit.do" class="btn btn-primary btn-sm">프로필</a>
+						<button type="button" class="btn btn-outline-success btn-sm" id="followBtn" >팔로우</button>
 						<div class="profile-userbuttons">
 							팔로잉<a href="following.do?userid=${userdto.userid }" class="btn btn-outline-dark following btn-sm"></a> 
 							팔로워<a href="follower.do?userid=${userdto.userid }" class="btn btn-outline-dark follower btn-sm"></a>
@@ -299,11 +303,11 @@ body {
 			},
 			success : function(msg) {
 				if (msg === 1) {
-					$('#followBtn').val('팔로잉');
+					$('#followBtn').html('팔로잉');
 					$('#followBtn').removeClass('btn-outline-success');
 					$('#followBtn').addClass('btn-success');
 				} else if (msg === 2) {
-					$('#followBtn').val('팔로우');
+					$('#followBtn').html('팔로우');
 					$('#followBtn').removeClass('btn-success');
 					$('#followBtn').addClass('btn-outline-success');
 				} else {
@@ -336,8 +340,8 @@ body {
 	});
 	$('#followBtn').click(function() {
 		var sessionid = "${userdto.userid}";
-		if ($('#followBtn').val() == '팔로잉') {
-			$('#followBtn').val('팔로우');
+		if ($('#followBtn').html() == '팔로잉') {
+			$('#followBtn').html('팔로우');
 			$('#followBtn').removeClass('btn-success');
 			$('#followBtn').addClass('btn-outline-success');
 
@@ -352,7 +356,7 @@ body {
 				}
 			});
 		} else {
-			$('#followBtn').val('팔로잉');
+			$('#followBtn').html('팔로잉');
 			$('#followBtn').removeClass('btn-outline-success');
 			$('#followBtn').addClass('btn-success');
 
@@ -363,7 +367,7 @@ body {
 					"newfol" : sessionid
 				},
 				succes : function(msg) {
-					$('#followBtn').val('팔로잉');
+					$('#followBtn').html('팔로잉');
 				}
 			});
 		}

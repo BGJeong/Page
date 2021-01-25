@@ -27,7 +27,7 @@ body {
 }
 
 @media only screen and (max-width : 760px) {
-	#q {
+	#input {
 		display: none;
 	}
 }
@@ -99,7 +99,7 @@ body {
 	$('#input').keyup(function(){
 		var search = $('#input').val();
 		var uid = "";
-		var html ="<table class='table'>";
+		var html ="<table class='table' style='background:white; width:200px;'>";
 		var sessionid = "<%=(String)session.getAttribute("id")%>";
 		$.ajax({
 			url:"searchAction.do",

@@ -39,8 +39,8 @@ body {
 					</div>
 				</div>
 				<div class="col-md-9">
-					<div class="card">
-						<div class="card-body">
+					<div class="card" style="position:unset;">
+						<div class="card-body" style="position:unset;">
 							<div class="row">
 								<div class="col-md-12">
 									<h4>회원 탈퇴</h4>
