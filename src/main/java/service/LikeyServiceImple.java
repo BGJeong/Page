@@ -1,5 +1,7 @@
 package service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +21,8 @@ public class LikeyServiceImple implements LikeyService{
 	}
 	public void insert_like(LikeyDTO dto) throws Exception {
 		dao.insert_like(dto);
+	}
+	public ArrayList<LikeyDTO> totalLike(LikeyDTO dto) throws Exception {
+		return dao.totalLike(dto);
 	}
 }

@@ -1,5 +1,7 @@
 package DAO;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,5 +20,9 @@ public class LikeyDAOImpl implements LikeyDAO {
 	}
 	public void insert_like(LikeyDTO dto){
 		sqlsession.selectOne("likeyns.insert_like", dto);
+	}
+	public ArrayList<LikeyDTO> totalLike(LikeyDTO dto){
+		ArrayList<LikeyDTO> list = (ArrayList)sqlsession.selectList("likeyns.totalLike", dto); 
+		return list;
 	}
 }

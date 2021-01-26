@@ -51,7 +51,10 @@ public class PageController {
 		ArrayList<Board> list = new ArrayList<Board>();
 		ArrayList<memberDTO> mem_dto = new ArrayList<memberDTO>();
 		ArrayList<LikeyDTO> likey = new ArrayList<LikeyDTO>();
+		LikeyDTO likeDTO2 = new LikeyDTO();
 		LikeyDTO likeDTO = new LikeyDTO();
+		ArrayList<LikeyDTO> likeArr = new ArrayList<LikeyDTO>();
+		ArrayList<Integer> likeArrInt = new ArrayList<Integer>();
 		for(int i = 0; i < fol_dto.size(); i++){
 			list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
 		}
@@ -60,21 +63,24 @@ public class PageController {
 			likeDTO.setLike_bbsid(list.get(i).getNo());
 			likeDTO.setLike_userid(userid);
 			likey.add(likey_service.likecheck(likeDTO));
+			likeDTO2.setLike_bbsid(list.get(i).getNo());
+			likeArrInt.add(likey_service.totalLike(likeDTO2).size());
 		}
+		model.addAttribute("likeArrInt",likeArrInt);
 		model.addAttribute("mem_dto",mem_dto);
 		model.addAttribute("list", list);
 		model.addAttribute("likey", likey);
 		return "board/board_home";
 	}
 	
-	//占쏙옙占쌜쇽옙 占쏙옙
+	//�뜝�룞�삕�뜝�뙗�눦�삕 �뜝�룞�삕
 	@RequestMapping("boardform.do")
 	public String insertform() {
 		System.out.println("boardform");
 		return "board/boardform";
 	}
 	
-	//占쏙옙占쌜쇽옙
+	//�뜝�룞�삕�뜝�뙗�눦�삕
 	@RequestMapping("board_write.do")
 	public String board_write( @RequestParam("upload_file") MultipartFile mf,
 							  Board board,
@@ -84,10 +90,10 @@ public class PageController {
 		System.out.println("board_write");
 //		System.out.println("board.file "+board.getUpload());
 		
-		//占쏙옙占쏙옙占쏙옙占쏙옙
+		//�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕
 		String filename = mf.getOriginalFilename();
 		int size = (int)mf.getSize();
-		String path = request.getRealPath("upload");	//getRealPath("")占쏙옙 webapp占쏙옙占쏙옙占쏙옙 占쏙옙占�
+		String path = request.getRealPath("upload");	//getRealPath("")�뜝�룞�삕 webapp�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝占�
 		int result = 0;
 		int maxsize = 100000; //100kb
 		
@@ -98,15 +104,15 @@ public class PageController {
 		
 		String file[] = new String[2];
 		
-		//占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙
+		//�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕
 		if(filename !="" || size>0) {
-			//image.jpg => image / jpg占쏙옙 占싻몌옙
+			//image.jpg => image / jpg�뜝�룞�삕 �뜝�떩紐뚯삕
 			StringTokenizer st = new StringTokenizer(filename, ".");
-			file[0] = st.nextToken();	//占쏙옙占싹몌옙
-			file[1] = st.nextToken();	//확占쏙옙占쏙옙
+			file[0] = st.nextToken();	//�뜝�룞�삕�뜝�떦紐뚯삕
+			file[1] = st.nextToken();	//�솗�뜝�룞�삕�뜝�룞�삕
 			
-			//result = -1 : size占쏙옙 占십뱄옙크占쏙옙
-			//result = -2 : file 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싱안된댐옙.
+			//result = -1 : size�뜝�룞�삕 �뜝�떗諭꾩삕�겕�뜝�룞�삕
+			//result = -2 : file �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�떛�븞�맂�뙋�삕.
 			if(size > 100000) {
 				result = -1;
 			}else if(!file[1].equals("jpg") && 
@@ -115,11 +121,11 @@ public class PageController {
 				result = -2;
 			}
 			
-			//占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쌔댐옙占싸뤄옙 占쏙옙占쏙옙
-			mf.transferTo(new File(path+"/"+filename));	//throws Exception占쏙옙 占쌥듸옙占� 占쌩곤옙占쏙옙占쌍억옙占쏙옙占�
+			//�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�뙏�뙋�삕�뜝�떥琉꾩삕 �뜝�룞�삕�뜝�룞�삕
+			mf.transferTo(new File(path+"/"+filename));	//throws Exception�뜝�룞�삕 �뜝�뙠�벝�삕�뜝占� �뜝�뙥怨ㅼ삕�뜝�룞�삕�뜝�뙇�뼲�삕�뜝�룞�삕�뜝占�
 		}
 		
-		//board占쏙옙占쏙옙 file占싱몌옙 占쏙옙占쏙옙
+		//board�뜝�룞�삕�뜝�룞�삕 file�뜝�떛紐뚯삕 �뜝�룞�삕�뜝�룞�삕
 		board.setUpload(filename);
 		String userid = (String)session.getAttribute("id");
 		board.setId(userid);
@@ -135,7 +141,7 @@ public class PageController {
 	public String modal() {
 		return "board/modal";
 	}
-	//醫뗭븘�슂
+	//�넫�뿭釉섓옙�뒄
 //	@RequestMapping("good.do")
 //	public String good(int no) {
 //		return "bo"

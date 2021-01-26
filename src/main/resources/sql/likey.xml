@@ -12,4 +12,7 @@
 	<insert id="insert_like" parameterType="Likey">
 		insert into likey values(likey_seq.nextval, #{like_userid}, #{like_bbsid}, 0, sysdate )
 	</insert>
+	<select id="totalLike" parameterType="likey" resultType="likey">
+		select * from likey where like_bbsid = #{like_bbsid}
+	</select>
 </mapper>

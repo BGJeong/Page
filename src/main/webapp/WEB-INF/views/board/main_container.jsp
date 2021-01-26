@@ -175,9 +175,11 @@ body {
 							<div class="card-footer">
 							<c:if test="${empty likey[status.index]}">
 								<img onclick="view(${a.no}, this)" class="likeimg" id="likeimg_${status.index }" src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/line_like.png" style="width:1.5rem">
+								<span class="totalLike${status.index}">${likeArrInt[status.index]}</span>
 							</c:if>
 							<c:if test="${! empty likey[status.index]}">
 								<img onclick="view(${a.no}, this)" class="likeimg" id="likeimg_${status.index }" src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/fill_like.png" style="width:1.5rem">
+								<span class="totalLike${status.index }">${likeArrInt[status.index]}</span>
 							</c:if>
 								<a href="#" class="card-link"><i class="fa fa-comment"></i>Comment</a> 
 								<a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
@@ -211,16 +213,29 @@ function view(msg, e){
 			"board_no" : msg
 		},
 		success : function(result) {
-			if(result == 1) {
+			console.log(result);
+			if(result.result == 1) {
 				$(e).attr("src", "https://cdn.jsdelivr.net/gh/bgjeong/cdn/fill_like.png");
-				console.log($(e));
+				$(e).next().html(result.totalLike);
 			} else {
-				
+				$(e).next().html(result.totalLike);
 				$(e).attr("src", "https://cdn.jsdelivr.net/gh/bgjeong/cdn/line_like.png");
-				console.log(result);
 			}
 		}
 	});
+	/* $.ajax({
+		url : "totalLikeChange.do",
+		type : "post",
+		data : {
+			"board_no":msg
+		},
+		success : function(result) {
+			console.log(result)
+			
+			console.log($(e).next());
+		}
+	//e.prev()
+	}); */
 }
 
 	
