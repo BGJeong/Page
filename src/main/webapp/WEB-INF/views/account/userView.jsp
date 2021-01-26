@@ -199,7 +199,7 @@ body {
 												</div>
 												<div class="ml-2">
 													<div class="h5 m-0">${a.id }</div>
-													<div class="h7 text-muted">${a.name}</div>
+													<div class="h7 text-muted">${userdto.nickname}</div>
 												</div>
 											</div>
 											<div>

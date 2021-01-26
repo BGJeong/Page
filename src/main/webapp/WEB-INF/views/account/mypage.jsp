@@ -212,7 +212,7 @@ body {
 							<h3>글을 작성해보세요.</h3>
 						</c:if>
 						<c:if test="${!empty board }">
-							<c:forEach var="a" items="${board}">
+							<c:forEach var="a" items="${board}" varStatus="status">
 								<div class="card gedf-card"  style="position:unset;">
 									<div class="card-header">
 										<div class="d-flex justify-content-between align-items-center">
@@ -224,7 +224,7 @@ body {
 												</div>
 												<div class="ml-2">
 													<div class="h5 m-0">@${a.id }</div>
-													<div class="h7 text-muted">${a.name}</div>
+													<div class="h7 text-muted">${dto.nickname}</div>
 												</div>
 											</div>
 											<div>
