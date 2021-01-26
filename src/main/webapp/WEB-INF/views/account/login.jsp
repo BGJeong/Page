@@ -31,7 +31,7 @@ body {
 	background-color: #fafafa;
 }
 </style>
-<title>로그인</title>
+<title>페이지</title>
 </head>
 <body>
 	<form method="post" action="loginAction.do">
@@ -86,6 +86,11 @@ body {
 				<a href="${url}"> <img width="250"
 					src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png" />
 				</a>
+			</div>
+			<div class="mt-3" id="kakao_id_login" style="text-align: center">
+				<a href="${kakao_url}"> 
+					<img width="250" height="59" src="img/kakao_login_medium_narrow.png" />
+				</a> 
 			</div>
 			<div></div>
 	</form>

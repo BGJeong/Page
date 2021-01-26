@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.mail.HtmlEmail;
+import org.codehaus.jackson.JsonNode;
 import org.imgscalr.Scalr;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -66,6 +67,9 @@ public class AccountController {
 	private void setNaverLoginBO(NaverLoginBO naverLoginBO) {
 		this.naverLoginBO = naverLoginBO;
 	}
+	@Autowired
+	private KakaoController kakaologin;
+	
 	@RequestMapping(value="retire.do")
 	public String retire() {
 		return "account/retire";
@@ -291,6 +295,42 @@ public class AccountController {
 		return "redirect:index.jsp";
 	}
 
+	@RequestMapping(value = "/kakaocallback.do", produces = "application/json", method = { RequestMethod.GET, RequestMethod.POST })
+	public String kakaoLogin(@RequestParam("code") String code, memberDTO member, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception { 
+		
+		System.out.println("kakao콜백");
+//		ModelAndView mav = new ModelAndView();
+		// 결과값을 node에 담아줌 
+		JsonNode node = kakaologin.getAccessToken(code); 
+		// accessToken에 사용자의 로그인한 모든 정보가 들어있음 
+		JsonNode accessToken = node.get("access_token");
+		// 사용자의 정보 
+		JsonNode userInfo = kakaologin.getKakaoUserInfo(accessToken);
+		String kemail = null;
+		JsonNode properties = userInfo.path("properties");
+		JsonNode kakao_account = userInfo.path("kakao_account"); 
+		System.out.println(kakao_account.asText());
+		kemail = kakao_account.path("email").asText(); 
+		System.out.println("이메일"+kemail);
+		memberDTO dto = service.userInfoEmail(kemail);
+		if(dto!= null) {
+			String userid = dto.getUserid();
+			//id로 세션발행
+			session.setAttribute("id", userid);
+			session.setAttribute("pimg", dto.getProfile_img());
+			session.setAttribute("dto", dto);
+			//my페이지로
+			return "account/home";
+		
+		//신규유저 join으로 보냄 id,nickname
+		}else if(dto == null) {
+			member.setEmail(kemail);
+			model.addAttribute("member", member);
+			
+			return "account/join";
+		}
+		return ""; 
+		}// end kakaoLogin()
 	@RequestMapping(value = "callback.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String callback(Model model, @RequestParam String code, @RequestParam String state, HttpSession session, memberDTO member)
 			throws IOException, ParseException {
