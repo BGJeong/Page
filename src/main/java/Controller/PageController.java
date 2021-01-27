@@ -53,23 +53,27 @@ public class PageController {
 		ArrayList<LikeyDTO> likey = new ArrayList<LikeyDTO>();
 		LikeyDTO likeDTO2 = new LikeyDTO();
 		LikeyDTO likeDTO = new LikeyDTO();
-		ArrayList<LikeyDTO> likeArr = new ArrayList<LikeyDTO>();
 		ArrayList<Integer> likeArrInt = new ArrayList<Integer>();
-		for(int i = 0; i < fol_dto.size(); i++){
-			list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
+		if(fol_dto == null) {
+			
+		} else {
+			for(int i = 0; i < fol_dto.size(); i++){
+				list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
+			}
+			for(int i = 0; i < list.size(); i++){
+				mem_dto.add(mem_service.findpwd(list.get(i).getId()));
+				likeDTO.setLike_bbsid(list.get(i).getNo());
+				likeDTO.setLike_userid(userid);
+				likey.add(likey_service.likecheck(likeDTO));
+				likeDTO2.setLike_bbsid(list.get(i).getNo());
+				likeArrInt.add(likey_service.totalLike(likeDTO2).size());
+			}
+			model.addAttribute("likeArrInt",likeArrInt);
+			model.addAttribute("mem_dto",mem_dto);
+			model.addAttribute("list", list);
+			model.addAttribute("likey", likey);
 		}
-		for(int i = 0; i < list.size(); i++){
-			mem_dto.add(mem_service.findpwd(list.get(i).getId()));
-			likeDTO.setLike_bbsid(list.get(i).getNo());
-			likeDTO.setLike_userid(userid);
-			likey.add(likey_service.likecheck(likeDTO));
-			likeDTO2.setLike_bbsid(list.get(i).getNo());
-			likeArrInt.add(likey_service.totalLike(likeDTO2).size());
-		}
-		model.addAttribute("likeArrInt",likeArrInt);
-		model.addAttribute("mem_dto",mem_dto);
-		model.addAttribute("list", list);
-		model.addAttribute("likey", likey);
+		
 		return "board/board_home";
 	}
 	

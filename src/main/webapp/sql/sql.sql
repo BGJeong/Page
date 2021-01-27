@@ -15,3 +15,5 @@ create table tt(
 	regdate date );
 	
 create sequence tt_seq;
+
+select * from tt order by regdate;

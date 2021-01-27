@@ -41,7 +41,7 @@ body {
 	<nav class="navbar navbar-light bg-light">
 		<div class="container-sm" style="width: 80%;">
 			<a class="navbar-brand" href="board_home.do"> <img
-				src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/korean.png" alt=""
+				src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/logo.png" alt=""
 				style="width: 4rem;" class="d-inline-block align-top img-fluid">
 			</a>
 			<div class="col-sm-3 col-md-3">
@@ -72,6 +72,8 @@ body {
 						<li><h6 class="dropdown-header">${id }님</h6></li>
 						<li><a class="dropdown-item" href="mypage.do">마이페이지</a></li>
 						<li><a class="dropdown-item" href="edit.do">프로필 수정</a></li>
+						<li><hr class="dropdown-divider"></li>
+						<li><a href="search.do" class="dropdown-item">유저 검색</a></li>
 						<li><hr class="dropdown-divider"></li>
 						<li><a class="dropdown-item" href="logout.do">로그아웃</a></li>
 					</ul>

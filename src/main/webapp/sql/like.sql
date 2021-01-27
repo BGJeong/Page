@@ -14,3 +14,6 @@ select * from likey where like_userid='ddddd' and like_bbsid=81;
 select * from likey
 update likey set like_status=1 where like_userid='ddddd';
 delete from likey;
+
+select a.id, a.no, a.name, a.content from tt a, follow b where a.id = b.mem_id and b.target_id = 'ddddd';
+select * from tt;
