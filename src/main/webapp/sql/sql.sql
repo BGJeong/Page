@@ -17,3 +17,8 @@ create table tt(
 create sequence tt_seq;
 
 select * from tt order by regdate;
+
+
+
+
+

@@ -30,5 +30,18 @@
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="100000000"/>	
 	</beans:bean>	
-	
+	<beans:bean id="sessionChk" class="Controller.SessionCheckInter"/>	
+	 <interceptors>
+		<interceptor>
+			
+			<mapping path="/home.do"/>
+			<mapping path="/mypage.do"/>
+			<mapping path="/userView.do"/>
+			<mapping path="/edit.do"/>
+			<mapping path="/editPass.do"/>
+			<mapping path="/board_home.do"/>
+			
+			<beans:ref bean="sessionChk"/>
+		</interceptor>
+	</interceptors>
 </beans:beans>

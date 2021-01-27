@@ -15,5 +15,5 @@ select * from likey
 update likey set like_status=1 where like_userid='ddddd';
 delete from likey;
 
-select a.id, a.no, a.name, a.content from tt a, follow b where a.id = b.mem_id and b.target_id = 'ddddd';
+select a.id, b.target_id, a.no, a.name, a.content, a.regdate from tt a, follow b where a.id = b.mem_id and b.mem_id = 'ddddd' order by regdate desc;
 select * from tt;
