@@ -12,4 +12,22 @@
 	<select id="list" resultType="board" parameterType="String">
 		select * from tt where id=#{id} order by regdate desc
 	</select>
+	<!-- 글목록 (번호로) -->
+	<select id="listno" resultType="board" parameterType="int">
+		select * from tt where no=#{no}
+	</select>
+	<!-- 상세정보 -->
+	<select id="content" parameterType="int" resultType="board">
+		select * from tt where no=#{no}
+	</select>
+	
+	<!-- 글수정 -->
+	<update id="update" parameterType="board">
+		update tt set register=sysdate, content=#{content}, upload=#{upload} where no=#{no}
+	</update>
+	
+	<!-- 글삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from tt where no=#{no}
+	</delete>
 </mapper>

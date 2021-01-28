@@ -8,7 +8,7 @@ select * from tt;
 create table tt(
 	no number primary key,
 	id varchar2(20),
-	name varchar2(10),
+	name varchar2(20),
 	content varchar2(100),
 	upload varchar2(100),
 	goodcount number default 0,

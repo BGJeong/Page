@@ -36,8 +36,11 @@ body {
 	content: none;
 	display: none;
 }
-
-.img-fluid . max-width: 100 %; and height: auto ;
+/* 수정함 */
+.img-fluid1{
+ max-width: 100%;
+  height: 168px ;
+  }
 body {
 	background: #f8f9fa;;
 }
@@ -152,6 +155,22 @@ body {
 	border-color: #d4d4d4;
 	border-width: 0.5px;
 }
+.mylist{
+	width:200px;
+	height:200px;
+	float: left;
+	list-style:none;
+	margin-right: 20px;
+	margin-top: 40px;
+	
+}
+.card-body{
+
+	width:200px;
+	height:200px;
+	overflow:hidden;
+}
+
 </style>
 </head>
 <body>
@@ -199,8 +218,8 @@ body {
 					<!-- END MENU -->
 				</div>
 			</div>
-			<div class="col-md-9">
-				<div class="profile-content">
+			<div class="col-md-9 profile-content">
+				
 					<div class="col">
 						<!-- 리스트 -->
 						<article class="my-3 mx-5">
@@ -212,164 +231,48 @@ body {
 							<h3>글을 작성해보세요.</h3>
 						</c:if>
 						<c:if test="${!empty board }">
+						<ul>
 							<c:forEach var="a" items="${board}" varStatus="status">
-								<div class="card gedf-card"  style="position:unset;">
-									<div class="card-header">
-										<div class="d-flex justify-content-between align-items-center">
-											<div
-												class="d-flex justify-content-between align-items-center">
-												<div class="mr-2">
-													<img src="<%=request.getContextPath() %>/upload/${pimg}"
-														width="45" class="rounded-circle">
-												</div>
-												<div class="ml-2">
-													<div class="h5 m-0">@${a.id }</div>
-													<div class="h7 text-muted">${dto.nickname}</div>
-												</div>
-											</div>
-											<div>
-												<div class="dropdown">
-													<button class="btn btn-link dropdown-toggle" type="button"
-														id="gedf-drop1" data-toggle="dropdown"
-														aria-haspopup="true" aria-expanded="false">
-														<i class="fa fa-ellipsis-h"></i>
-													</button>
-													<div class="dropdown-menu dropdown-menu-right"
-														aria-labelledby="gedf-drop1">
-														<div class="h6 dropdown-header">Configuration</div>
-														<a class="dropdown-item" href="#">Save</a> <a
-															class="dropdown-item" href="#">Hide</a> <a
-															class="dropdown-item" href="#">Report</a>
-													</div>
-												</div>
-											</div>
-										</div>
-
-									</div>
+							<li class="mylist">
+								<div class="card gedf-card"  style="position:unset;" onclick="test(${a.no})">	
 									<div class="card-body">
-										<div class="text-muted h7 mb-2">
-											<i class="fa fa-clock-o"></i>${a.regdate }</div>
 										<c:if test="${!empty a.upload }">
 											<a class="card-link" href="#"> <!-- 제목 공간 --> <img
 												src="<%=request.getContextPath() %>/upload/${a.upload}"
-												class="img-fluid" />
+												class="img-fluid1" />
 											</a>
 										</c:if>
-										<p class="card-text">${a.content }</p>
+										<c:if test="${empty a.upload }">
+												<a class="card-link" href="#"><img src="<%=request.getContextPath() %>/upload/default.png" class="img-fluid" />
+												</a>
+										</c:if>
 									</div>
-									<div class="card-footer">
-										<a href="#" class="card-link"><i class="fa fa-gittip"></i>
-											Like</a> <a href="#" class="card-link"><i
-											class="fa fa-comment"></i> Comment</a> <a href="#"
-											class="card-link"><i class="fa fa-mail-forward"></i>
-											Share</a>
-									</div>
+									
 								</div>
-
+							</li>
 							</c:forEach>
+							</ul>
 						</c:if>
 					</div>
 				</div>
 			</div>
-		</div>
+		
 	</div>
 	<center>
 		<strong>footer </strong>
 	</center>
-	<%-- <div class="mt-3 container-fluid" align="center">
-		<h3>마이페이지</h3>
-		<div class="row align-items-start">
-			<div class="col-4">
-				<img src="<%=request.getContextPath() %>/upload/${dto.profile_img}"
-					style="width: 30%; height: 30%;" class="img-fluid rounded-circle">
-				<p>${dto.userid }님</p>
-			</div>
-			<div class="col-4">
-				<a href="edit.do" class="btn btn-primary">프로필 편집</a> <a
-					href="retire.do" class="btn btn-danger">회원 탈퇴</a> <a
-					href="logout.do" class="btn btn-dark">로그아웃</a>
-			</div>
-			<div class="col-4">
-				<div>
-					팔로잉<a href="following.do?userid=${dto.userid }"
-						class="btn btn-outline-dark following"></a>팔로워<a
-						href="follower.do?userid=${dto.userid }"
-						class="btn btn-outline-dark follower"></a>
-				</div>
-			</div>
-		</div>
-		<hr>
-		<selection class="container">
-		<div class="row">
-			<div class="col "></div>
-			<div class="col-5">
-				<!-- 내용 -->
-				<div class="row">
-					<div class="col">
-						<!-- 리스트 -->
-						<article class="my-3 mx-5">
-							<div class="row"><h3>내 글 목록</h3></div>
-						</article>
-						<c:if test="${empty board}">
-							<h3>글을 작성해보세요.</h3>
-						</c:if>
-						<c:if test="${!empty board }">
-							<c:forEach var="a" items="${board}">
-								<article class="my-3 mx-5">
-									<div class="row border"">
-										<a href="userView.do?uid=${a.id }" style="pointer-events: none; display: inline-block;text-decoration:none;color:black;" ><img
-											src="<%=request.getContextPath() %>/upload/${pimg}"
-											style="width: 2rem;"class="rounded-circle" >${a.id }</a>
-									</div>
-									<!-- 이름 -->
-									<div class="row border">
-										<!-- contents -->
-										<div class="col">
-											<div class="row">${a.content }</div>
-											<c:if test="${!empty a.upload }">
-												<div class="row">
-													<img
-														src="<%=request.getContextPath() %>/upload/${a.upload}"
-														width="500px" />
-												</div>
-											</c:if>
-										</div>
-									</div>
-
-									<div class="row">
-										<!-- bottom_icons -->
-										<div class="col text-center">
-											<!-- 좋아요 -->
-											<a class="btn btn-white" href="good.do?no='${a.no}'"><img
-												src="./img/good.jpg" width="60%"></a>
-										</div>
-
-										<div class="col text-center">
-											<!-- 댓글달기 -->
-											<a class="btn btn-white" href="#"><img
-												src="./img/comment.jpg" width="60%"></a>
-										</div>
-									</div>
-
-									<div class="row border">좋아요 ${a.goodcount }</div>
-									<!-- like -->
-									<div class="row border">comment_container</div>
-									<!-- comment_container -->
-									<div class="row border">comment_field</div>
-									<!-- comment_field -->
-								</article>
-							</c:forEach>
-						</c:if>
-					</div>
-				</div>
-			</div>
-			<div class="col "></div>
-		</div>
-		</selection>
-
-	</div> --%>
 </body>
 <script>
+
+function test(a){
+
+	var ref = "mypop.do?no="+a
+	window.open(ref,"myboard","width=500 , height=500, left=800, top=500" );
+
+}
+
+
+
 $(function(){
 	var sessionid = "<%=(String) session.getAttribute("id")%>";
 		var html = "<table class='table'>";

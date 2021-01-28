@@ -60,63 +60,52 @@ body {
 			<div class="col-md-6 gedf-main">
 
 				<!--- \\\\\\\Post-->
-				<div class="card gedf-card" style="position: unset;">
-					<div class="card-header">
-						<ul class="nav nav-tabs card-header-tabs" id="myTab"
-							role="tablist">
-							<li class="nav-item"><a class="nav-link active"
-								id="posts-tab" data-toggle="tab" href="#posts" role="tab"
-								aria-controls="posts" aria-selected="true">Make a
-									publication</a></li>
-							<li class="nav-item"><a class="nav-link" id="images-tab"
-								data-toggle="tab" role="tab" aria-controls="images"
-								aria-selected="false" href="#images">Images</a></li>
-						</ul>
-					</div>
-					<div class="card-body">
-						<div class="tab-content" id="myTabContent">
-							<div class="tab-pane fade show active" id="posts" role="tabpanel"
-								aria-labelledby="posts-tab">
-								<div class="form-group">
-									<label class="sr-only" for="message">post</label>
-									<textarea class="form-control" id="message" rows="3"
-										placeholder="What are you thinking?"></textarea>
-								</div>
-
-							</div>
-							<div class="tab-pane fade" id="images" role="tabpanel"
-								aria-labelledby="images-tab">
-								<div class="form-group">
-									<div class="custom-file">
-										<input type="file" class="custom-file-input" id="customFile">
-										<label class="custom-file-label" for="customFile">Upload
-											image</label>
+				<form method="post" action="board_write.do" enctype="multipart/form-data">
+					<div class="card gedf-card" style="position: unset;">
+						<div class="card-header">
+							<ul class="nav nav-tabs card-header-tabs" id="myTab"
+								role="tablist">
+								<li class="nav-item"><a class="nav-link active"
+									id="posts-tab" data-toggle="tab" href="#posts" role="tab"
+									aria-controls="posts" aria-selected="true">게시글</a></li>
+							</ul>
+						</div>
+						<div class="card-body">
+							<div class="tab-content" id="myTabContent">
+								<div class="tab-pane fade show active" id="posts"
+									role="tabpanel" aria-labelledby="posts-tab">
+									<div class="form-group">
+										<label class="sr-only" for="message">피드</label>
+										<textarea class="form-control" id="content" name="content" rows="3" placeholder="오늘의 일상은 어땠나요?"></textarea>
 									</div>
+									<div class="custom-file">
+										<div class="file_upload"><input type="file" name="upload_file" id="upload_file"></div>
+										<div class="image" style="display:none;">
+											<img id="select_image" src="#" width="100%">
+										</div>
+									</div>
+
 								</div>
-								<div class="py-4"></div>
 							</div>
-						</div>
-						<div class="btn-toolbar justify-content-between">
-							<div class="btn-group">
-								<button type="submit" class="btn btn-primary">share</button>
-							</div>
-							<div class="btn-group">
-								<button id="btnGroupDrop1" type="button"
-									class="btn btn-link dropdown-toggle" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-globe"></i>
-								</button>
-								<div class="dropdown-menu dropdown-menu-right"
-									aria-labelledby="btnGroupDrop1">
-									<a class="dropdown-item" href="#"><i class="fa fa-globe"></i>
-										Public</a> <a class="dropdown-item" href="#"><i
-										class="fa fa-users"></i> Friends</a> <a class="dropdown-item"
-										href="#"><i class="fa fa-user"></i> Just me</a>
+							<div class="btn-toolbar justify-content-between">
+								<div class="btn-group">
+									<button type="submit" class="btn btn-primary">게시</button>
 								</div>
+								<!--                             <div class="btn-group"> -->
+								<!--                                 <button id="btnGroupDrop1" type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" -->
+								<!--                                     aria-expanded="false"> -->
+								<!--                                     <i class="fa fa-globe"></i> -->
+								<!--                                 </button> -->
+								<!--                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1"> -->
+								<!--                                     <a class="dropdown-item" href="#"><i class="fa fa-globe"></i> Public</a> -->
+								<!--                                     <a class="dropdown-item" href="#"><i class="fa fa-users"></i> Friends</a> -->
+								<!--                                     <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Just me</a> -->
+								<!--                                 </div> -->
+								<!--                             </div> -->
 							</div>
 						</div>
 					</div>
-				</div>
+					</form>
 				<c:if test="${empty list}">
 					<h3>
 						<a href="search.do">팔로우</a>하고 소식받기
@@ -125,7 +114,7 @@ body {
 				<c:if test="${!empty list }">
 
 					<!-- Post /////-->
-					<c:forEach var="a" items="${list}" varStatus="status">
+					<c:forEach var="a" items="${list}" varStatus="status" begin="1" end="${endrow }">
 						<!--- \\\\\\\Post-->
 						<div class="card gedf-card">
 							<div class="card-header">
@@ -144,21 +133,28 @@ body {
 											<div class="h7 text-muted">${a.name}</div>
 										</div>
 									</div>
+									<!-- dropdown -->
 									<div>
+										
 										<div class="dropdown">
-											<button class="btn btn-link dropdown-toggle" type="button"
-												id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true"
-												aria-expanded="false">
-												<i class="fa fa-ellipsis-h"></i>
-											</button>
-											<div class="dropdown-menu dropdown-menu-right"
-												aria-labelledby="gedf-drop1">
-												<div class="h6 dropdown-header">Configuration</div>
-												<a class="dropdown-item" href="#">Save</a> <a
-													class="dropdown-item" href="#">Hide</a> <a
-													class="dropdown-item" href="#">Report</a>
-											</div>
+											<a class="btn dropdown-toggle" href="#" role="button" 
+											id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+												<img src="<%=request.getContextPath() %>/img/dropdown.jpg" width="20px">
+											</a>
+											<c:if test="${a.id eq id }">
+											<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink_me">
+												<li><a class="dropdown-item" href="boardupdateform.do?no=${a.no }">수정</a></li>
+												<li><a class="dropdown-item" href="boarddelete.do?no=${a.no }">삭제</a></li>
+											</ul>
+											</c:if>
+											<c:if test="${a.id ne id }">
+											<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink_me">
+												<li><a class="dropdown-item" href="#">저장</a></li>
+												<li><a class="dropdown-item" href="#">차단</a></li>
+											</ul>
+											</c:if>
 										</div>
+										
 									</div>
 								</div>
 
@@ -187,6 +183,11 @@ body {
 						</div>
 						<!-- Post /////-->
 					</c:forEach>
+					<c:if test="${endrow <= listcount}">
+							<div class="d-flex justify-content-center">
+								<div><a href="board_home.do?endrow=${endrow + 3}">다음</a></div>
+							</div>
+					</c:if>
 				</c:if>
 			</div>
 		</div>
@@ -203,6 +204,27 @@ $(function(){
 	console.log(itemList.length);
 	console.log("${id}");
 });
+
+$(function() {
+    $("#upload_file").on('change', function(){
+        readURL(this);
+    });
+});
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+    		$('.file_upload').hide();
+            $('#select_image').attr('src', e.target.result);
+            $('.image').show();
+            
+        }
+
+      reader.readAsDataURL(input.files[0]);
+    }
+}
 
 //msg = 글번호
 function view(msg, e){
