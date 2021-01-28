@@ -48,6 +48,10 @@ body {
 .likeimg {
 	cursor:pointer;
 }
+body {
+	font-family: sans-serif;
+	background-color: #eeeeee;
+}
 </style>
 </head>
 <body>

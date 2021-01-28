@@ -9,18 +9,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-		<div class="row" class="form-control ">
-			<div class="col-4"></div>
-			<div class="col-4">
+		<div class="row" class="form-control" style="margin:auto; width:300px;">
 				<div class="form-floating mb-3 mt-5">
 					<input type="text" class="form-control" id="floatingInput" >
 					<label for="floatingInput">Search</label>
 				</div>
-				<div id="result"></div>
-			</div>
-			<div class="col-4">
-				</div>
-			</div>
+			<div id="result"></div>
+		</div>
 </body>
 <script>
 	$('#floatingInput').keyup(function(){
@@ -41,7 +36,7 @@
 					if(uid===sessionid){
 						continue;
 					} else {
-						html+="<tr><td><a href='userView.do?uid="+uid+"'><img src='https://cdn.jsdelivr.net/gh/bgjeong/cdn/user_flat2.png' style='width:2rem;' class='rounded-circle'><button id=btn"+i+" class='btn btn-light' onclick='viewBtnClick("+'"'+uid+'"'+")' value='"+uid+"'> "+uid+"</td></tr></a>";
+						html+="<tr><td><a href='userView.do?uid="+uid+"'><img src='upload/"+upro+"' style='width:2rem;' class='rounded-circle'><button id=btn"+i+" class='btn btn-light' onclick='viewBtnClick("+'"'+uid+'"'+")' value='"+uid+"'> "+uid+"</td></tr></a>";
 					}
 				}
 				html+="</table>";

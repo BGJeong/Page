@@ -46,6 +46,7 @@ import DTO.FollowDTO;
 import DTO.LikeyDTO;
 import DTO.memberDTO;
 import service.FollowServiceImpl;
+import service.LikeyService;
 import service.LikeyServiceImple;
 import service.MemberServiceImpl;
 import service.PageService;
@@ -522,11 +523,24 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "userView.do", method = RequestMethod.GET)
-	public String userView(@RequestParam("uid") String uid, Model model) {
+	public String userView(@RequestParam("uid") String uid, Model model, HttpSession session) throws Exception {
 		logger.info(uid);
 		memberDTO dto = service.findpwd(uid);
 		ArrayList<Board> board = page_service.getBoardList(uid);
-
+		ArrayList<LikeyDTO> arr_like = new ArrayList<LikeyDTO>();
+		ArrayList<Integer> arr_int = new ArrayList<Integer>();
+		for(int i = 0; i < board.size(); i ++) {
+			LikeyDTO likeyDTO = new LikeyDTO();
+			likeyDTO.setLike_bbsid(board.get(i).getNo());
+			likeyDTO.setLike_userid((String)session.getAttribute("id"));
+			arr_like.add(likey_service.likecheck(likeyDTO));
+			arr_int.add(likey_service.totalLike(likeyDTO).size());
+		}
+		for(int i : arr_int) {
+			System.out.println(i);
+		}
+		model.addAttribute("arr_int", arr_int);
+		model.addAttribute("arr_like", arr_like);
 		model.addAttribute("board", board);
 		model.addAttribute("userdto", dto);
 		return "account/userView";

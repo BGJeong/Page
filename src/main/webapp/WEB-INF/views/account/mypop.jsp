@@ -24,14 +24,15 @@
   text-align: center;
   word-break:break-all;
 }
+
 </style>
 </head>
 <body>
-<div class="gallery" onclick="javascript:window.close()" style="margin:auto;">
+<div class="gallery" onclick="javascript:window.close()" style="margin:auto; width:300; height:auto;">
 	<div class="row">
 		<div class="card-body">
 				<div class="text-muted h7 mb-2">
-					작성날짜:  <fmt:formatDate value="${pop.regdate }" pattern="yyyy-MM-dd HH:mm"/></div>
+					<p>작성날짜: </p> <fmt:formatDate value="${pop.regdate }" pattern="yyyy-MM-dd HH:mm"/></div>
 				<c:if test="${!empty pop.upload }">
 					<img
 						src="<%=request.getContextPath() %>/upload/${pop.upload}"

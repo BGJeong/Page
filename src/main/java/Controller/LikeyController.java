@@ -21,6 +21,38 @@ public class LikeyController {
 	@Autowired
 	private LikeyServiceImple likey_service;
 	
+	@RequestMapping(value="/clickLikeUser.do")
+	@ResponseBody
+	public HashMap<String, String> clickLikeUser(@RequestParam("board_no") String board_no,
+						@RequestParam("userid") String userid) throws Exception{
+		String uid = userid;
+		LikeyDTO user_info = new LikeyDTO();
+		user_info.setLike_bbsid(Integer.parseInt(board_no));
+		user_info.setLike_userid(uid);
+		LikeyDTO likey_dto = likey_service.likecheck(user_info);
+		if(likey_dto != null){
+			likey_service.delete_like(user_info);
+			LikeyDTO dto = new LikeyDTO();
+			dto.setLike_bbsid(Integer.parseInt(board_no));
+			ArrayList<LikeyDTO> arr = likey_service.totalLike(dto);
+			String a = Integer.toString(arr.size());
+			HashMap<String,String> map = new HashMap<String, String>();
+			map.put("result", "0");
+			map.put("totalLike", a);
+			return map;
+		} else {
+			likey_service.insert_like(user_info);
+			LikeyDTO dto = new LikeyDTO();
+			dto.setLike_bbsid(Integer.parseInt(board_no));
+			ArrayList<LikeyDTO> arr = likey_service.totalLike(dto);
+			String a = Integer.toString(arr.size());
+			HashMap<String,String> map = new HashMap<String, String>();
+			map.put("result", "1");
+			map.put("totalLike", a);
+			return map;
+		}
+	}
+	
 	@RequestMapping(value="/clickLike.do")
 	@ResponseBody
 	public HashMap<String, String> clickLike(@RequestParam("board_no") String board_no, HttpSession session) throws Exception{

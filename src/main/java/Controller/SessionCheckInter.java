@@ -1,5 +1,7 @@
 package Controller;
 
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,10 +19,16 @@ public class SessionCheckInter extends HandlerInterceptorAdapter {
 		HttpSession session = request.getSession();
 		
 		String id = (String)session.getAttribute("id");
-		System.out.println(id);
 		
-		if (id == null || id.equals(""))  {		
-			response.sendRedirect("login.do");
+		if (id == null || id.equals(""))  {	
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.print("<script>");
+			out.print("alert('세션이 만료되어 로그인페이지로 이동합니다');");
+			out.print("location.href='login.do'");
+			out.print("</script>");
+			out.close();
+			
 			return false;
 		}
 		return true;

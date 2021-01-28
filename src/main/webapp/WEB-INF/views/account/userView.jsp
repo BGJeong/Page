@@ -187,7 +187,7 @@ body {
 							<h3>작성한 글이 없습니다</h3>
 						</c:if>
 						<c:if test="${!empty board }">
-							<c:forEach var="a" items="${board}">
+							<c:forEach var="a" items="${board}" varStatus="status">
 								<div class="card gedf-card"  style="position:unset;">
 									<div class="card-header">
 										<div class="d-flex justify-content-between align-items-center">
@@ -233,11 +233,16 @@ body {
 										<p class="card-text">${a.content }</p>
 									</div>
 									<div class="card-footer">
-										<a href="#" class="card-link"><i class="fa fa-gittip"></i>
-											Like</a> <a href="#" class="card-link"><i
-											class="fa fa-comment"></i> Comment</a> <a href="#"
-											class="card-link"><i class="fa fa-mail-forward"></i>
-											Share</a>
+										<c:if test="${empty arr_like[status.index]}">
+											<img onclick="view(${a.no}, this)" class="likeimg" id="likeimg_${status.index }" src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/line_like.png" style="width:1.5rem">
+											<span class="totalLike${status.index}">${arr_int[status.index]}</span>
+										</c:if>
+										<c:if test="${! empty arr_like[status.index]}">
+											<img onclick="view(${a.no}, this)" class="likeimg" id="likeimg_${status.index }" src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/fill_like.png" style="width:1.5rem">
+											<span class="totalLike${status.index }">${arr_int[status.index]}</span>
+										</c:if> 
+										<a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
+										<a href="#"	class="card-link"><i class="fa fa-mail-forward"></i>Share</a>
 									</div>
 								</div>
 
@@ -254,8 +259,38 @@ body {
 
 </body>
 <script type="text/javascript">
+function view(msg, e){
+	var userid = "${userdto.userid}";
+	$.ajax({
+		url : "clickLikeUser.do",
+		type : "post",
+		data : {
+			"board_no" : msg,
+			"userid" : userid
+		},
+		success : function(result) {
+			console.log(result);
+			if(result.result == 1) {
+				$(e).attr("src", "https://cdn.jsdelivr.net/gh/bgjeong/cdn/fill_like.png");
+				$(e).next().html(result.totalLike);
+			} else {
+				$(e).next().html(result.totalLike);
+				$(e).attr("src", "https://cdn.jsdelivr.net/gh/bgjeong/cdn/line_like.png");
+			}
+		}
+	});
+};
+
 	$(function() {
-		console.log("${userdto}");
+		var itemList = [
+		                <c:forEach items="${board}" var="item" varStatus="status">
+		                        "${item.no}",
+		                </c:forEach>
+		                ];
+		console.log("len : "+itemList.length);
+		console.log("uid : "+'${userdto.userid}');
+		console.log("id : ${id}");
+		console.log("userdto : ${userdto}");
 		var sessionid = "${userdto.userid}";
 		$.ajax({
 			url : "userFollow.do",
@@ -357,5 +392,7 @@ body {
 			}
 		});
 	});
+	
+	
 </script>
 </html>

@@ -45,8 +45,8 @@ body {
         
         <div class="col-md-3" align='center'></div>
         <div class="col-md-6" align='center'><img width="200" height="200"src="img/warning-sign.png" alt="err"><br>
-        <h4>잠시 오류가 발생했습니다.</h4><br>
-        <a href="mypage.do">돌아가기</a>
+        <h4>잠시 오류가 발생했습니다</h4><br>
+        <button id = "go-1" class="btn btn-dark">돌아가기</button>
         </div>
        	
     </div>
@@ -55,4 +55,9 @@ body {
     <div class="row"></div>
 </div>
 </body>
+<script type="text/javascript">
+	$('#go-1').click(function(){
+		history.go(-1);
+	});
+</script>
 </html>
