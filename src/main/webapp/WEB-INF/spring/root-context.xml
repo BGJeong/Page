@@ -15,8 +15,8 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="jdbc:oracle:thin:@3.36.64.158:1521:xe" />
-		<property name="username" value="ec2spring" />
-		<property name="password" value="ec2spring" />
+		<property name="username" value="spring" />
+		<property name="password" value="spring" />
 	</bean>
 
 

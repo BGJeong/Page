@@ -455,34 +455,34 @@ public class AccountController {
 
 		service.insert(dto);
 
-		String keys = "";
-		int key;
-		for (int i = 0; i < 4; i++) {
-			key = (int) (Math.random() * 9 + 1);
-			keys += key;
-		}
-		System.out.println(keys);
-		try {
-			HtmlEmail mail = new HtmlEmail();
-			mail.setDebug(true);
-			mail.setCharset("utf-8");
-			mail.setSSL(true);
-			mail.setHostName("smtp.naver.com");
-			mail.setSmtpPort(587);
-
-			mail.setAuthentication("aw1530@naver.com", "page1530"); // 관리자 이메일 비밀번호
-			mail.setTLS(true);
-			mail.addTo(dto.getEmail(), "utf-8");// 받는사람 메일
-			mail.setFrom("aw1530@naver.com", "운영자", "utf-8"); // 보내는 메일
-			mail.setSubject("인증번호 발송");
-			mail.setHtmlMsg("<p align = 'center'>이메일 인증번호</p><br>" + "<p align = 'center'>인증번호 :</p>" + keys);
-			mail.send();
-
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		model.addAttribute("keys", keys);
-		return "account/injeng";
+//		String keys = "";
+//		int key;
+//		for (int i = 0; i < 4; i++) {
+//			key = (int) (Math.random() * 9 + 1);
+//			keys += key;
+//		}
+//		System.out.println(keys);
+//		try {
+//			HtmlEmail mail = new HtmlEmail();
+//			mail.setDebug(true);
+//			mail.setCharset("utf-8");
+//			mail.setSSL(true);
+//			mail.setHostName("smtp.naver.com");
+//			mail.setSmtpPort(587);
+//
+//			mail.setAuthentication("aw1530@naver.com", "page1530"); // 관리자 이메일 비밀번호
+//			mail.setTLS(true);
+//			mail.addTo(dto.getEmail(), "utf-8");// 받는사람 메일
+//			mail.setFrom("aw1530@naver.com", "운영자", "utf-8"); // 보내는 메일
+//			mail.setSubject("인증번호 발송");
+//			mail.setHtmlMsg("<p align = 'center'>이메일 인증번호</p><br>" + "<p align = 'center'>인증번호 :</p>" + keys);
+//			mail.send();
+//
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		}
+//		model.addAttribute("keys", keys);
+		return "account/login";
 	}
 
 	// 메일 인증완료

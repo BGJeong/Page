@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>글 상세 보기</title>
 <script async src="https://cdn.jsdelivr.net/npm/perfops-rom"></script>
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
