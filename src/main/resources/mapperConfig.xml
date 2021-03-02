@@ -8,6 +8,7 @@
 		<typeAlias alias="follow" type="DTO.FollowDTO" />
 		<typeAlias alias="board" type="DTO.Board" />
 		<typeAlias alias="likey" type="DTO.LikeyDTO"/>
+		<typeAlias alias="reply" type="DTO.replyDTO"/>
 	</typeAliases>
 
 	<!-- <environments default="development">

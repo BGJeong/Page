@@ -6,8 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script async src="https://cdn.jsdelivr.net/npm/perfops-rom"></script>
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<script async src="https://cdn.jsdelivr.net/npm/perfops-rom"></script>
 <style>
 body {
 	background-color: #eeeeee;
@@ -174,15 +174,31 @@ body {
 							</div>
 							<div class="card-footer">
 							<c:if test="${empty likey[status.index]}">
-								<img onclick="view(${a.no}, this)" class="likeimg" id="likeimg_${status.index }" src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/line_like.png" style="width:1.5rem">
+								<img onclick="view(${a.no}, this)" class="likeimg" id="likeimg_${status.index }" src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/line_like.png" style="width:1.5rem"/>
 								<span class="totalLike${status.index}">${likeArrInt[status.index]}</span>
 							</c:if>
 							<c:if test="${! empty likey[status.index]}">
-								<img onclick="view(${a.no}, this)" class="likeimg" id="likeimg_${status.index }" src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/fill_like.png" style="width:1.5rem">
+								<img onclick="view(${a.no}, this)" class="likeimg" id="likeimg_${status.index }" src="https://cdn.jsdelivr.net/gh/bgjeong/cdn/fill_like.png" style="width:1.5rem"/>
 								<span class="totalLike${status.index }">${likeArrInt[status.index]}</span>
 							</c:if>
 								<a href="#" class="card-link"><i class="fa fa-comment"></i>Comment</a> 
 								<a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+							</div>
+							<div class="card-body">
+								<p class="card-text">댓글</p>
+								<c:if test="${empty reply[status.index]}">
+									
+								</c:if>
+								<c:if test="${! empty reply[status.index]}">
+									<c:forEach var="b" items="${reply }" >
+										<c:if test="${a.no eq b.reply_bbsid }">
+										<a href="userView.do?uid=${b.reply_userid }">${b.reply_userid }</a>
+										<p id="reply_${status.index }" class="card-text">${b.reply_content }</p>
+										</c:if>
+									</c:forEach>
+								</c:if>
+								<input class="card-text form-control" type="text" id="replyContent_${status.index }"  >
+								<input id="replyBtn_${status.index }" type="button" class="btn btn-outline-dark" value="작성" onclick="replyInsert(${status.index}, ${a.no })" >
 							</div>
 						</div>
 						<!-- Post /////-->
@@ -198,22 +214,37 @@ body {
 	</div>
 </body>
 <script>
+
+function replyInsert(msg, bno) {
+	var replyContent = $('#replyContent_'+msg).val();
+	var html = "";
+	$.ajax({
+		url : "replyInsert.do",
+		type : "post",
+		data : {
+			"replyContent" : replyContent,
+			"bno" : bno
+		},
+		success : function(result) {
+			$('#replyContent_'+msg).val("");
+			$('#reply_'+msg).append('<br><a href="userView.do?uid='+result.reply_userid+'">'+result.reply_userid+'</a>');
+			$('#reply_'+msg).append("<br><span>"+result.reply_content+"</span>");
+		}
+	})
+};
+
 $(function(){
-	var itemList = [
-	                <c:forEach items="${list}" var="item" varStatus="status">
-	                        "${item.no}",
-	                </c:forEach>
-	                ];
-		
-	console.log(itemList.length);
-	console.log("${id}");
-});
+	var status = ${status.index}
+	console.log(status);
+})
 
 $(function() {
     $("#upload_file").on('change', function(){
         readURL(this);
     });
-});
+})
+
+
 
 function readURL(input) {
     if (input.files && input.files[0]) {

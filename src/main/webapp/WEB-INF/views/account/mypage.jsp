@@ -208,7 +208,7 @@ body {
 					<div class="profile-usermenu">
 						<ul class="nav flex-column">
 							<li class="nav-item"><a class="nav-link active"
-								aria-current="page" href="#">Active</a></li>
+								aria-current="page" href="edit.do">프로필 수정</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Link</a></li>
 							<li class="nav-item"><a class="nav-link" href="#">Link</a></li>
 							<li class="nav-item"><a class="nav-link disabled" href="#"

@@ -11,19 +11,23 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import DTO.Board;
 import DTO.FollowDTO;
 import DTO.LikeyDTO;
 import DTO.memberDTO;
+import DTO.replyDTO;
 import scala.collection.generic.BitOperations.Int;
 import service.FollowServiceImpl;
 import service.LikeyServiceImple;
 import service.MemberServiceImpl;
 import service.PageService;
+import service.ReplyServiceImpl;
 
 @Controller
 public class PageController {
@@ -36,6 +40,8 @@ public class PageController {
 	private MemberServiceImpl mem_service;
 	@Autowired
 	private LikeyServiceImple likey_service;
+	@Autowired
+	private ReplyServiceImpl Reply_service;
 	
 	@RequestMapping("good.do")
 	public String good() {
@@ -54,11 +60,12 @@ public class PageController {
 		LikeyDTO likeDTO2 = new LikeyDTO();
 		LikeyDTO likeDTO = new LikeyDTO();
 		ArrayList<Integer> likeArrInt = new ArrayList<Integer>();
+		ArrayList<replyDTO> reply = new ArrayList<replyDTO>();
 		if(fol_dto == null) {
 			
 		} else {
 			for(int i = 0; i < fol_dto.size(); i++){
-				list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id())); 
+				list.addAll(page_service.getBoardList(fol_dto.get(i).getTarget_id()));
 			}
 			for(int i = 0; i < list.size(); i++){
 				mem_dto.add(mem_service.findpwd(list.get(i).getId()));
@@ -67,11 +74,15 @@ public class PageController {
 				likey.add(likey_service.likecheck(likeDTO));
 				likeDTO2.setLike_bbsid(list.get(i).getNo());
 				likeArrInt.add(likey_service.totalLike(likeDTO2).size());
-
-				}
+				reply.addAll(Reply_service.getSelect(list.get(i).getNo()));
 			}
+		}
 		int endrow = 3;
 		int listcount = list.size();
+		
+		for(int i=0; i < reply.size(); i++) {
+			System.out.println(reply.get(i));
+		}
 		
 		if(request.getParameter("endrow") != null) {
 			endrow = Integer.parseInt(request.getParameter("endrow"));
@@ -82,6 +93,7 @@ public class PageController {
 		model.addAttribute("likey", likey);
 		model.addAttribute("endrow", endrow);
 		model.addAttribute("listcount", listcount);
+		model.addAttribute("reply", reply);
 		
 		return "board/board_home";
 	}
@@ -245,6 +257,37 @@ public class PageController {
 	@RequestMapping(value="modal.do")
 	public String modal() {
 		return "board/modal";
+	}
+	
+	@RequestMapping(value="replyInsert.do")
+	@ResponseBody
+	public replyDTO replyInsert(@RequestParam("replyContent") String replyContent, @RequestParam("bno") int bno, HttpSession session){ 
+		int result = 0;
+		replyDTO dto = new replyDTO();
+		String sessionId = (String)session.getAttribute("id");
+		dto.setReply_bbsid(bno);
+		dto.setReply_content(replyContent);
+		dto.setReply_userid(sessionId);
+		
+		result = Reply_service.replyInsert(dto);
+		
+		ArrayList<replyDTO> list = new ArrayList<replyDTO>();
+		/*for(int i=0; i<list.size(); i++){
+			System.out.println(list.get(i));
+		}*/
+		list = Reply_service.getSelect(bno);
+		
+		return dto;
+	}
+	
+	@RequestMapping(value="replySelect.do")
+	@ResponseBody
+	public String replySelect(@RequestParam("bbsList") ArrayList<Integer> list){
+		ArrayList<replyDTO> dto = new ArrayList<replyDTO>();
+		for(int i=0; i<list.size();i++){
+			System.out.println(list.get(i));
+		}
+		return "a";
 	}
 	//�넫�뿭釉섓옙�뒄
 //	@RequestMapping("good.do")
